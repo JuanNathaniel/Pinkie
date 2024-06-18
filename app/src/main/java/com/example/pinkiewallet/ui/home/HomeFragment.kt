@@ -77,6 +77,34 @@ class HomeFragment : Fragment() {
 //        homeViewModel.text.observe(viewLifecycleOwner) {
 //            textView.text = it
 //        }
+
+        //Ini view/unview saldo
+        binding.eyebuttonopen.setOnClickListener{
+            //Tidak tampilkan saldo
+            binding.eyebuttonopen.visibility = View.INVISIBLE
+            binding.eyebuttonclose.visibility = View.VISIBLE
+        }
+        binding.eyebuttonclose.setOnClickListener{
+            //tampilkan saldo
+            binding.eyebuttonclose.visibility = View.INVISIBLE
+            binding.eyebuttonopen.visibility = View.VISIBLE
+
+        }
+
+        //Ini tuh menu menu yang diatas
+        binding.topupbt.setOnClickListener{
+            Toast.makeText(requireContext(), "This is Top Up men", Toast.LENGTH_SHORT).show()
+        }
+        binding.transferbt.setOnClickListener{
+            Toast.makeText(requireContext(), "This is Tranfer ges", Toast.LENGTH_SHORT).show()
+        }
+        binding.withdrawbt.setOnClickListener{
+            Toast.makeText(requireContext(), "This is Withdraw", Toast.LENGTH_SHORT).show()
+        }
+        binding.historybt.setOnClickListener{
+            Toast.makeText(requireContext(), "This is History tante", Toast.LENGTH_SHORT).show()
+        }
+
         return root
     }
 
