@@ -16,33 +16,49 @@
         android:layout_marginLeft="30dp"
         android:background="@drawable/round_gradient" />
 
-    <ImageView
-        android:src="@drawable/ic_top_up"
+    <ImageButton
+        android:id="@+id/topupbt"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="90dp"
-        android:layout_marginLeft="65dp" />
+        android:layout_marginLeft="65dp"
+        android:src="@drawable/ic_top_up"
+        android:background="?attr/selectableItemBackground"
+        android:scaleType="fitCenter"
+        android:gravity="center_vertical" />
 
-    <ImageView
+    <ImageButton
+        android:id="@+id/transferbt"
         android:src="@drawable/ic_transfer"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginTop="95dp"
-        android:layout_marginLeft="150dp" />
+        android:layout_marginLeft="150dp"
+        android:background="?attr/selectableItemBackground"
+        android:scaleType="fitCenter"
+        android:gravity="center_vertical" />
 
-    <ImageView
+    <ImageButton
+        android:id="@+id/withdrawbt"
         android:src="@drawable/ic_withdraw"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginTop="95dp"
-        android:layout_marginLeft="225dp" />
+        android:layout_marginLeft="225dp"
+        android:background="?attr/selectableItemBackground"
+        android:scaleType="fitCenter"
+        android:gravity="center_vertical" />
 
-    <ImageView
+    <ImageButton
+        android:id="@+id/historybt"
         android:src="@drawable/ic_history"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginTop="95dp"
-        android:layout_marginLeft="300dp" />
+        android:layout_marginLeft="300dp"
+        android:background="?attr/selectableItemBackground"
+        android:scaleType="fitCenter"
+        android:gravity="center_vertical" />
 
     <TextView
         android:layout_width="match_parent"
@@ -103,8 +119,31 @@
         android:layout_marginLeft="30dp"
         android:background="@drawable/round_gradient" />
 
+    <ImageButton
+        android:id="@+id/eyebuttonopen"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_eyeopen"
+        android:scaleType="fitCenter"
+        android:background="?attr/selectableItemBackground"
+        android:layout_marginLeft="225dp"
+        android:layout_marginTop="300dp"
+        android:gravity="center_vertical" />
+
+    <ImageButton
+        android:id="@+id/eyebuttonclose"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_eyeclose"
+        android:scaleType="fitCenter"
+        android:background="?attr/selectableItemBackground"
+        android:layout_marginLeft="225dp"
+        android:layout_marginTop="300dp"
+        android:gravity="center_vertical"
+        android:visibility="gone"/>
+
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="285dp"
         android:text="Is Real Cash"
