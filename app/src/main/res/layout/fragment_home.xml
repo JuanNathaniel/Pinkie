@@ -1,22 +1,207 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.HomeFragment">
+    android:background="@color/pink"
+    android:layout_marginLeft="-10dp">
+
+    <View
+        android:id="@+id/myView"
+        android:layout_width="350dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="55dp"
+        android:layout_marginLeft="30dp"
+        android:background="@drawable/round_gradient" />
+
+    <ImageView
+        android:src="@drawable/ic_top_up"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="90dp"
+        android:layout_marginLeft="65dp" />
+
+    <ImageView
+        android:src="@drawable/ic_transfer"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="95dp"
+        android:layout_marginLeft="150dp" />
+
+    <ImageView
+        android:src="@drawable/ic_withdraw"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="95dp"
+        android:layout_marginLeft="225dp" />
+
+    <ImageView
+        android:src="@drawable/ic_history"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="95dp"
+        android:layout_marginLeft="300dp" />
 
     <TextView
-        android:id="@+id/text_home"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:text="Top Up"
+        android:textSize="12sp"
+        android:textColor="@color/white"
+        android:layout_marginTop="135dp"
+        android:layout_marginLeft="65dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Transfer"
+        android:textSize="12sp"
+        android:textColor="@color/white"
+        android:layout_marginTop="135dp"
+        android:layout_marginLeft="143dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Withdraw"
+        android:textSize="12sp"
+        android:textColor="@color/white"
+        android:layout_marginTop="135dp"
+        android:layout_marginLeft="214dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="History"
+        android:textSize="12sp"
+        android:textColor="@color/white"
+        android:layout_marginTop="135dp"
+        android:layout_marginLeft="300dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Account"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:layout_marginTop="230dp"
+        android:layout_marginLeft="30dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/white"
+        android:layout_marginTop="260dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp" />
+
+    <View
+        android:id="@+id/myAccount"
+        android:layout_width="350dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="276dp"
+        android:layout_marginLeft="30dp"
+        android:background="@drawable/round_gradient" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="285dp"
+        android:text="Is Real Cash"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:layout_marginLeft="45dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Rp"
+        android:layout_marginTop="330dp"
+        android:layout_marginLeft="45dp"
+        android:textColor="@color/white"
+        android:textSize="20sp"/>
+
+
+    <View
+        android:id="@+id/myPoint"
+        android:layout_width="120dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="360dp"
+        android:layout_marginLeft="230dp"
+        android:backgroundTint="@color/white"
+        android:background="@drawable/round_gradient" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Points"
+        android:layout_marginTop="362dp"
+        android:layout_marginLeft="295dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Favorite Trasaction"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:layout_marginTop="430dp"
+        android:layout_marginLeft="30dp" />
+
+
+    <!-- TextView untuk jika empty favorite transaction -->
+    <TextView
+        android:id="@+id/emptyListTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/none_favorite_transaction"
+        android:textSize="18sp"
+        android:textColor="@android:color/white"
+        android:layout_marginTop= "495dp"
+        android:layout_marginLeft="100dp"
+        android:visibility="gone" />
+
+    <!-- TextView untuk jika empty insight -->
+    <TextView
+        android:id="@+id/emptyListInsight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text ="No Insight at a Time"
+        android:textSize="18sp"
+        android:textColor="@android:color/white"
+        android:layout_marginTop= "620dp"
+        android:layout_marginLeft="119dp"
+        android:visibility="gone"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/horizontalRecyclerViewFavoriteTransaction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="460dp"
+        android:orientation="horizontal"
+        android:scrollbars="none"
+        tools:listitem="@layout/item_horizontal"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Insight"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:layout_marginTop="570dp"
+        android:layout_marginLeft="30dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/horizontalRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="600dp"
+        android:orientation="horizontal"
+        android:scrollbars="none"
+        tools:listitem="@layout/item_horizontal"/>
+
+</RelativeLayout>
+
+
