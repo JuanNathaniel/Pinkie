@@ -1,0 +1,8 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <corners android:radius="20dp" /> <!-- Mengatur sudut bulatan (rounded) -->
+    <gradient
+        android:startColor="#FF4081"
+        android:endColor="#3F51B5"
+        android:angle="45"/>
+</shape>
