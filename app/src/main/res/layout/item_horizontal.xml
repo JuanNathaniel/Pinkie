@@ -1,12 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/itemTextViewHorizontal"
-    android:layout_width="150dp"
-    android:layout_height="100dp"
-    android:textSize="16sp"
-    android:layout_marginLeft="30dp"
-    android:layout_marginRight="-15dp"
-    android:textColor="@color/white"
-    android:background="@drawable/round_gradient"
-    android:padding="8dp" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_marginStart="23dp"
+    android:layout_marginEnd="-18dp"
+    android:padding="8dp">
+
+    <ImageView
+        android:id="@+id/itemImageViewHorizontal"
+        android:layout_width="150dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:scaleType="centerCrop"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:id="@+id/itemTextViewHorizontal"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:layout_gravity="center"
+        android:textColor="@color/white"
+        android:background="@drawable/round_gradient"
+        android:padding="8dp"
+        android:textAlignment="center" />
+</LinearLayout>

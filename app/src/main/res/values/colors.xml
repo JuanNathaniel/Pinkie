@@ -10,4 +10,7 @@
     <color name="pink">#FF8D8D</color>
     <color name="dark">#524C42</color>
     <color name="red">#eb6565</color>
+    <color name="bone">#FFF6E9</color>
+    <color name="darkred">#C80036</color>
+    <color name="darkblue">#005C78</color>
 </resources>
