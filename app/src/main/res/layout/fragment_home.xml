@@ -24,6 +24,7 @@
         android:layout_marginLeft="65dp"
         android:src="@drawable/ic_top_up"
         android:background="?attr/selectableItemBackground"
+        android:foreground="?attr/selectableItemBackground"
         android:scaleType="fitCenter"
         android:gravity="center_vertical" />
 
@@ -35,6 +36,7 @@
         android:layout_marginTop="95dp"
         android:layout_marginLeft="150dp"
         android:background="?attr/selectableItemBackground"
+        android:foreground="?attr/selectableItemBackground"
         android:scaleType="fitCenter"
         android:gravity="center_vertical" />
 
@@ -46,6 +48,7 @@
         android:layout_marginTop="95dp"
         android:layout_marginLeft="225dp"
         android:background="?attr/selectableItemBackground"
+        android:foreground="?attr/selectableItemBackground"
         android:scaleType="fitCenter"
         android:gravity="center_vertical" />
 
@@ -57,6 +60,7 @@
         android:layout_marginTop="95dp"
         android:layout_marginLeft="300dp"
         android:background="?attr/selectableItemBackground"
+        android:foreground="?attr/selectableItemBackground"
         android:scaleType="fitCenter"
         android:gravity="center_vertical" />
 
@@ -100,14 +104,14 @@
         android:textSize="17sp"
         android:textStyle="bold"
         android:textColor="@color/white"
-        android:layout_marginTop="230dp"
+        android:layout_marginTop="220dp"
         android:layout_marginLeft="30dp" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/white"
-        android:layout_marginTop="260dp"
+        android:layout_marginTop="250dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp" />
 
@@ -115,9 +119,65 @@
         android:id="@+id/myAccount"
         android:layout_width="350dp"
         android:layout_height="120dp"
-        android:layout_marginTop="276dp"
+        android:layout_marginTop="266dp"
         android:layout_marginLeft="30dp"
         android:background="@drawable/round_gradient" />
+
+    <TextView
+        android:id="@+id/cash"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="35.900"
+        android:textColor="@color/white"
+        android:layout_marginTop="317dp"
+        android:layout_marginLeft="80dp"
+        android:textSize="25dp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/listcirclecash"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="326dp"
+        android:layout_marginLeft="80dp"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/circle" />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/circle"
+            android:layout_marginLeft="5dp" />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/circle"
+            android:layout_marginLeft="5dp" />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/circle"
+            android:layout_marginLeft="5dp" />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/circle"
+            android:layout_marginLeft="5dp" />
+    </LinearLayout>
+
 
     <ImageButton
         android:id="@+id/eyebuttonopen"
@@ -126,8 +186,8 @@
         android:src="@drawable/ic_eyeopen"
         android:scaleType="fitCenter"
         android:background="?attr/selectableItemBackground"
-        android:layout_marginLeft="225dp"
-        android:layout_marginTop="300dp"
+        android:layout_marginLeft="205dp"
+        android:layout_marginTop="290dp"
         android:gravity="center_vertical" />
 
     <ImageButton
@@ -137,26 +197,27 @@
         android:src="@drawable/ic_eyeclose"
         android:scaleType="fitCenter"
         android:background="?attr/selectableItemBackground"
-        android:layout_marginLeft="225dp"
-        android:layout_marginTop="300dp"
+        android:layout_marginLeft="205dp"
+        android:layout_marginTop="290dp"
         android:gravity="center_vertical"
         android:visibility="gone"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="285dp"
-        android:text="Is Real Cash"
+        android:layout_marginTop="275dp"
+        android:text="Pinkie Cash"
         android:textStyle="bold"
         android:textColor="@color/white"
         android:textSize="30sp"
-        android:layout_marginLeft="45dp" />
+        android:layout_marginLeft="45dp"
+        android:fontFamily="@font/mettadahlia"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Rp"
-        android:layout_marginTop="330dp"
+        android:layout_marginTop="320dp"
         android:layout_marginLeft="45dp"
         android:textColor="@color/white"
         android:textSize="20sp"/>
@@ -164,24 +225,56 @@
 
     <View
         android:id="@+id/myPoint"
-        android:layout_width="120dp"
+        android:layout_width="130dp"
         android:layout_height="25dp"
-        android:layout_marginTop="360dp"
+        android:layout_marginTop="350dp"
         android:layout_marginLeft="230dp"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="@color/bone"
         android:background="@drawable/round_gradient" />
+
+    <TextView
+        android:id="@+id/openpoints"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="352dp"
+        android:layout_marginLeft="244dp"
+        android:text="3560"
+        android:textColor="@color/dark"
+        android:textStyle="italic" />
+
+    <TextView
+        android:id="@+id/closepoints"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="352dp"
+        android:layout_marginLeft="244dp"
+        android:text="Pinkie"
+        android:textColor="@color/dark"
+        android:textStyle="italic"
+        android:visibility = "gone"
+        android:fontFamily="@font/mettadahlia"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Points"
-        android:layout_marginTop="362dp"
+        android:textStyle="bold"
+        android:textColor="@color/dark"
+        android:layout_marginTop="352dp"
         android:layout_marginLeft="295dp"/>
+
+    <ImageView
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:src="@drawable/coin"
+        android:layout_marginTop="355dp"
+        android:layout_marginLeft="340dp" />
+
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Favorite Trasaction"
+        android:text="Favorite Transaction"
         android:textSize="17sp"
         android:textStyle="bold"
         android:textColor="@color/white"
