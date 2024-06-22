@@ -4,4 +4,6 @@
     <string name="title_qris">Qris</string>
     <string name="title_profile">Profile</string>
     <string name="none_favorite_transaction">None Favorite Transaction</string>
+    <string name="forward_arrow_desc">forward arrow desc</string>
+    <string name="icon_desc">icon desc\n</string>
 </resources>
