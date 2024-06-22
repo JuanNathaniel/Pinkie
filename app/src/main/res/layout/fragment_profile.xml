@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pink"
+    tools:context=".ui.ProfileFragment.ProfileFragment">
+
+    <View
+        android:layout_width="380dp"
+        android:layout_height="100dp"
+        android:background="@drawable/round_gradient"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:src="@drawable/ic_profilemenu"
+        android:layout_marginTop="45dp"
+        android:layout_marginStart="35dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="110dp"
+        android:layout_marginTop="45dp"
+        android:text="Riley Emotions"
+        android:textColor="@color/white"
+        android:textSize="22dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="082132123456"
+        android:textColor="@color/white"
+        android:textSize="18dp"
+        android:layout_marginStart="110dp"
+        android:layout_marginTop="77dp" />
+
+
+    <!--fsdfdsfsdf-->
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="170dp"
+        android:background="@drawable/round_solid"/>
+
+
+</RelativeLayout>
