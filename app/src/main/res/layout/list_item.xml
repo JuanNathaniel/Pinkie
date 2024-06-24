@@ -22,7 +22,7 @@
         android:layout_marginStart="16dp"
         android:text="Item Text"
         android:textSize="16sp"
-        android:textColor="@android:color/black" />
+        android:textColor="@color/grey" />
 
     <ImageView
         android:layout_width="30dp"

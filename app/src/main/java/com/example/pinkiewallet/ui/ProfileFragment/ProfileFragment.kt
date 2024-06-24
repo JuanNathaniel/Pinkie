@@ -9,9 +9,11 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pinkiewallet.ListAdapter
 import com.example.pinkiewallet.ListItem
 import com.example.pinkiewallet.R
+import com.example.pinkiewallet.VerticalAdapter
 import com.example.pinkiewallet.databinding.FragmentProfileBinding
 
 class ProfileFragment : Fragment() {
@@ -37,9 +39,15 @@ class ProfileFragment : Fragment() {
             ListItem(R.drawable.ic_policy, "Privacy Policy")
         )
 
-        val adapter = ListAdapter(requireContext(), listItems)
-        binding.listView.adapter = adapter
+        val adapter = VerticalAdapter(listItems) { item ->
+            // Implementasi untuk intent ke halaman lain atau tindakan lain saat item diklik
+            Toast.makeText(requireContext(), "Item ${item.text} clicked", Toast.LENGTH_SHORT).show()
+            // Contoh implementasi intent:
+            // startActivity(Intent(requireContext(), DetailActivity::class.java))
+        }
 
+        binding.recyclerViewProfile.layoutManager = LinearLayoutManager(context)
+        binding.recyclerViewProfile.adapter = adapter
 
         return root
     }
