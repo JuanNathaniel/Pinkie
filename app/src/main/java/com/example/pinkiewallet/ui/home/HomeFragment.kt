@@ -1,5 +1,6 @@
 package com.example.pinkiewallet.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pinkiewallet.HorizontalAdapter
 import com.example.pinkiewallet.Item
+import com.example.pinkiewallet.backend.CreateQR
+import com.example.pinkiewallet.backend.TransferActivity
 import com.example.pinkiewallet.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
@@ -90,10 +93,12 @@ class HomeFragment : Fragment() {
 
         //Ini tuh menu menu yang diatas
         binding.topupbt.setOnClickListener{
-            Toast.makeText(requireContext(), "This is Top Up men", Toast.LENGTH_SHORT).show()
+            val intent = Intent(requireContext(), CreateQR::class.java)
+            startActivity(intent)
         }
         binding.transferbt.setOnClickListener{
-            Toast.makeText(requireContext(), "This is Transfer ges", Toast.LENGTH_SHORT).show()
+            val intent = Intent(requireContext(), TransferActivity::class.java)
+            startActivity(intent)
         }
         binding.withdrawbt.setOnClickListener{
             Toast.makeText(requireContext(), "Upcoming Feature", Toast.LENGTH_SHORT).show()
