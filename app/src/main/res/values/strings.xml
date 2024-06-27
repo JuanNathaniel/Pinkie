@@ -1,13 +1,9 @@
 <resources>
-    <string name="app_name">Tubes_E-Money</string>
-    <string name="enter">Enter your <b>mobile number</b> to continue</string>
-    <string name="bycontinue">By continuing, you agree with our <b>Terms &amp; Conditions</b> and <b>Privacy Policy</b></string>
-    <string name="_hint">81234212340</string>
-    <string name="profile">Profile</string>
-    <string name="namauser">Juan Nathaniel</string>
-    <string name="personal_detail">Personal Detail</string>
-    <string name="help">Help</string>
-    <string name="free">free</string>
-    <string name="titleprofile" />
-    <string name="titlehome">titlehome</string>
+    <string name="app_name">Pinkie Wallet</string>
+    <string name="title_home">Home</string>
+    <string name="title_qris">Qris</string>
+    <string name="title_profile">Profile</string>
+    <string name="none_favorite_transaction">None Favorite Transaction</string>
+    <string name="forward_arrow_desc">forward arrow desc</string>
+    <string name="icon_desc">icon desc\n</string>
 </resources>
