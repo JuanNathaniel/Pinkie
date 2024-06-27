@@ -2,7 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <application
         android:allowBackup="true"
@@ -12,18 +17,37 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.PinkieWallet"
+        android:theme="@style/Theme.ProjectPastiBisa"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
-            android:exported="true"
-            android:label="@string/app_name">
+            android:name=".Register"
+            android:exported="false" />
+        <activity
+            android:name=".Login"
+            android:exported="true" >
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+        </activity>
+        <activity android:name=".Home"/>
+        <activity android:name=".Profile"/>
+        <activity android:name=".PinReqActivity" />
+        <activity android:name=".Payment" />
+        <activity android:name=".ScannedBarcodeActivity" />
+        <activity android:name=".QrMain" />
+        <activity android:name=".DaftarActivity" />
+        <activity android:name=".TransferActivity" />
+        <activity android:name=".CreateQR" />
+
+
     </application>
 
 </manifest>
