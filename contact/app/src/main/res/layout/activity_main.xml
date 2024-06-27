@@ -4,11 +4,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FF8D8D"
-
     tools:context=".MainActivity">
+
+    <SearchView
+        android:id="@+id/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:iconifiedByDefault="false"
+        android:queryHint="Search Contacts" />
 
     <ListView
         android:id="@+id/contact_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_below="@id/search_view" />
 </RelativeLayout>

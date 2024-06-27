@@ -1,4 +1,5 @@
 package com.example.contact
+
 import android.Manifest
 import android.content.pm.PackageManager
 import android.database.Cursor
@@ -6,6 +7,7 @@ import android.os.Bundle
 import android.provider.ContactsContract
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -17,9 +19,17 @@ class MainActivity : AppCompatActivity() {
         private const val PERMISSIONS_REQUEST_READ_CONTACTS = 100
     }
 
+    private lateinit var adapter: ArrayAdapter<String>
+    private lateinit var contacts: ArrayList<String>
+    private lateinit var listView: ListView
+    private lateinit var searchView: SearchView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        listView = findViewById(R.id.contact_list)
+        searchView = findViewById(R.id.search_view)
 
         // Cek dan minta izin jika belum diberikan
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)
@@ -33,6 +43,18 @@ class MainActivity : AppCompatActivity() {
             // Izin sudah diberikan, tampilkan kontak
             loadContacts()
         }
+
+        // Setup SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                adapter.filter.filter(newText)
+                return false
+            }
+        })
     }
 
     override fun onRequestPermissionsResult(
@@ -53,8 +75,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadContacts() {
-        val listView: ListView = findViewById(R.id.contact_list)
-        val contacts = ArrayList<String>()
+        contacts = ArrayList()
 
         val contentResolver = contentResolver
         val cursor: Cursor? = contentResolver.query(
@@ -102,7 +123,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, contacts)
+        adapter = ArrayAdapter(this, R.layout.list_item, contacts)
         listView.adapter = adapter
     }
 }
