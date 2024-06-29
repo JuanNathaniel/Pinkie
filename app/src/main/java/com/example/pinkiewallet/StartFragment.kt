@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import com.example.pinkiewallet.databinding.FragmentStartBinding
 
 class StartFragment : Fragment() {
@@ -31,9 +32,11 @@ class StartFragment : Fragment() {
 
         // Menggunakan binding yang sesuai untuk button
         binding.lanjutkanButton.setOnClickListener {
-            val intent = Intent(requireContext(), MainActivity::class.java)
-            startActivity(intent)
-            requireActivity().finish()
+            val register1Fragment = Register1()
+            val transaction: FragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragment_container, register1Fragment)
+            transaction.addToBackStack(null) // Untuk menambahkan ke back stack, jika diperlukan
+            transaction.commit()
         }
     }
 }
