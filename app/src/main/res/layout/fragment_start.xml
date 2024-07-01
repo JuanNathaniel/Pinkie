@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/startContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/pink"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pinkie"
+        android:textColor="@color/white"
+        android:textSize="50dp"
+        android:layout_marginTop="0dp"
+        android:fontFamily="@font/font_family" />
+
+    <ImageView
+        android:id="@+id/background_image"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_pinkie" />
+
+<!--    <VideoView-->
+<!--        android:id="@+id/background_video"-->
+<!--        android:layout_width="350dp"-->
+<!--        android:layout_height="350dp"-->
+<!--        android:layout_centerInParent="true"-->
+<!--        android:scaleType="centerCrop" />-->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Solusi Burung Keuangan"
+        android:textStyle="bold"
+        android:textSize="24sp"
+        android:textColor="#FFFFFF"
+        android:layout_marginTop="46dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nikmati berbagai layanan finansial dan kemudahan pembayaran dalam genggaman."
+        android:textSize="16sp"
+        android:textColor="#FFFFFF"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="32dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:gravity="center" />
+
+    <Button
+        android:id="@+id/lanjutkanButton"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="Lanjutkan"
+        android:layout_marginTop="-20dp"
+        android:background="@drawable/round_solid"
+        android:textColor="@color/white" />
+
+</LinearLayout>

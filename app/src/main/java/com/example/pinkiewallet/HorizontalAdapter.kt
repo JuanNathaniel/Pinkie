@@ -26,7 +26,6 @@ class HorizontalAdapter(private val itemList: List<Item>) :
 
     class ViewHolder(private val binding: ItemHorizontalBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Item) {
-            binding.itemTextViewHorizontal.text = item.name
             Glide.with(binding.itemImageViewHorizontal.context)
                 .load(item.imageUrl)
                 .into(binding.itemImageViewHorizontal)
