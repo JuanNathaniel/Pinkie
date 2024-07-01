@@ -25,6 +25,13 @@
         android:scaleType="centerCrop"
         android:src="@drawable/ic_pinkie" />
 
+<!--    <VideoView-->
+<!--        android:id="@+id/background_video"-->
+<!--        android:layout_width="350dp"-->
+<!--        android:layout_height="350dp"-->
+<!--        android:layout_centerInParent="true"-->
+<!--        android:scaleType="centerCrop" />-->
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

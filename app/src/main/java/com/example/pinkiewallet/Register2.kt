@@ -80,11 +80,11 @@ class Register2 : Fragment(){
 
         binding.fab.setOnClickListener{
             if (binding.pinInput.text.length == 6){
-//                val register3Fragment = Register3()
-//                val transaction: FragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
-//                transaction.replace(R.id.fragment_container, register3Fragment)
-//                transaction.addToBackStack(null) // Untuk menambahkan ke back stack, jika diperlukan
-//                transaction.commit()
+                val register3Fragment = Register3()
+                val transaction: FragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.fragment_container, register3Fragment)
+                transaction.addToBackStack(null) // Untuk menambahkan ke back stack, jika diperlukan
+                transaction.commit()
                 Toast.makeText(requireContext(), "Bisa nih mantap", Toast.LENGTH_SHORT).show()
             }
         }
