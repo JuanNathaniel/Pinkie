@@ -1,0 +1,125 @@
+{
+  "project_info": {
+    "project_number": "306846762865",
+    "firebase_url": "https://pinky-9c9b6-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "pinky-9c9b6",
+    "storage_bucket": "pinky-9c9b6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:306846762865:android:1db1723f88b22d0964d8d0",
+        "android_client_info": {
+          "package_name": "com.example.otpverify"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCV1KWCXxtztN-B5LZj592Rt0eEnBtsdQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:306846762865:android:b816e57e2c7b024364d8d0",
+        "android_client_info": {
+          "package_name": "com.example.pinkiewallet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCV1KWCXxtztN-B5LZj592Rt0eEnBtsdQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:306846762865:android:0fcc14a407d3f94864d8d0",
+        "android_client_info": {
+          "package_name": "com.example.projectpastibisa"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCV1KWCXxtztN-B5LZj592Rt0eEnBtsdQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:306846762865:android:5ec110f1e3213b2164d8d0",
+        "android_client_info": {
+          "package_name": "com.example.tubeskah"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCV1KWCXxtztN-B5LZj592Rt0eEnBtsdQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:306846762865:android:2c0e61f646c69a9464d8d0",
+        "android_client_info": {
+          "package_name": "com.millenialzdev.otpsmsauthfirebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCV1KWCXxtztN-B5LZj592Rt0eEnBtsdQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:306846762865:android:6e1029f8b9d72d1d64d8d0",
+        "android_client_info": {
+          "package_name": "pinky13.api"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCV1KWCXxtztN-B5LZj592Rt0eEnBtsdQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

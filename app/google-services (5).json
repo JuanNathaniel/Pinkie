@@ -27,6 +27,25 @@
     },
     {
       "client_info": {
+        "mobilesdk_app_id": "1:306846762865:android:b816e57e2c7b024364d8d0",
+        "android_client_info": {
+          "package_name": "com.example.pinkiewallet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCV1KWCXxtztN-B5LZj592Rt0eEnBtsdQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:306846762865:android:0fcc14a407d3f94864d8d0",
         "android_client_info": {
           "package_name": "com.example.projectpastibisa"
