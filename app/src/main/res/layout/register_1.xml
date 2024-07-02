@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pink">
+
+    <ImageButton
+        android:id="@+id/backward_button"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/ic_arrow_backward"
+        android:scaleType="fitCenter"
+        android:background="@color/pink"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="25dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1 dari 3"
+        android:textColor="@color/white"
+        android:textSize="16dp"
+        android:layout_toRightOf="@+id/backward_button"
+        android:layout_marginLeft="276dp"
+        android:layout_marginTop="25dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:text="Masukkin Kimi No Nawa"
+        android:textSize="30dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:layout_marginLeft="20dp" />
+
+    <TextView
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text="Let people know who you are pas tf tf an."
+        android:textColor="@color/bone"
+        android:layout_marginTop="150dp"
+        android:layout_marginLeft="20dp"
+        android:textSize="18dp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textFieldName"
+        android:layout_width="370dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="250dp"
+        android:layout_centerHorizontal="true"
+        android:hint="Nama Lengkap"
+        android:textColorHint="@color/grey" >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/bone"
+            android:textColor="@color/grey" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_next_regist"
+        android:tint="@color/white"
+        android:contentDescription="ButtonLanjutPage" />
+
+
+</RelativeLayout>

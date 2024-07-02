@@ -16,14 +16,4 @@
         android:scaleType="centerCrop"
         android:layout_marginBottom="8dp"/>
 
-    <TextView
-        android:id="@+id/itemTextViewHorizontal"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:layout_gravity="center"
-        android:textColor="@color/white"
-        android:background="@drawable/round_gradient"
-        android:padding="8dp"
-        android:textAlignment="center" />
 </LinearLayout>
