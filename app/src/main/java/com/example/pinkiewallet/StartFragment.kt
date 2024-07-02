@@ -32,11 +32,10 @@ class StartFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Menggunakan binding yang sesuai untuk button
         binding.lanjutkanButton.setOnClickListener {
-            val register1Fragment = Register1()
+            val loginregisterfragment = LoginRegister()
             val transaction: FragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container, register1Fragment)
+            transaction.replace(R.id.fragment_container, loginregisterfragment)
             transaction.addToBackStack(null) // Untuk menambahkan ke back stack, jika diperlukan
             transaction.commit()
         }
