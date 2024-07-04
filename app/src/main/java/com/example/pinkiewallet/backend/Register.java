@@ -16,6 +16,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.pinkiewallet.R;
+import com.example.pinkiewallet.StartActivity;
+import com.example.pinkiewallet.StartFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
@@ -36,7 +38,7 @@ import com.example.pinkiewallet.MainActivity;
 public class Register extends AppCompatActivity {
 
     private EditText etNoHp, etKodeOtp;
-    private Button btnSubmit, btnVerif, btnKembali;
+    private Button btnSubmit, btnVerif;
     private ProgressBar bar;
     private LinearLayout llOtp;
 
@@ -53,7 +55,6 @@ public class Register extends AppCompatActivity {
 
         etNoHp = findViewById(R.id.etNoHp);
         btnSubmit = findViewById(R.id.btnRegister);
-        btnKembali = findViewById(R.id.btnKembali);
 
         bar = findViewById(R.id.bar);
         etKodeOtp = findViewById(R.id.etKodeOtp);
@@ -63,12 +64,6 @@ public class Register extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance().getReference();
 
-        btnKembali.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), Login.class));
-            }
-        });
 
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -158,7 +153,9 @@ public class Register extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Log.d("FirebaseDB", "Nomor telepon berhasil disimpan untuk userId: " + userId);
                             Toast.makeText(getApplicationContext(), "Registrasi Berhasil", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(getApplicationContext(), DaftarActivity.class));
+                            Intent intent = new Intent(getApplicationContext(), StartActivity.class);
+                            intent.putExtra("FROM_REGISTER", true); // Tambahkan extra
+                            startActivity(intent);
                             finish();
                         } else {
                             Log.e("FirebaseDB", "Gagal menyimpan nomor telepon untuk userId: " + userId, task.getException());
@@ -167,6 +164,9 @@ public class Register extends AppCompatActivity {
                     }
                 });
     }
+
+
+
 
     private void kodeOTP(String noHp) {
         PhoneAuthOptions options =

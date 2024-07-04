@@ -10,13 +10,17 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import com.example.pinkiewallet.databinding.Register3Binding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 
 class Register3 : Fragment(){
 
     private var _binding: Register3Binding? = null
     private val binding get() = _binding!!
+
+    private lateinit var mAuth: FirebaseAuth
+    private lateinit var database: FirebaseDatabase
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,32 +33,28 @@ class Register3 : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.backwardButton.setOnClickListener{
-            //do something
-            // Mendapatkan instance dari FragmentManager
-            val fragmentManager = requireActivity().supportFragmentManager
+        mAuth = FirebaseAuth.getInstance()
+        database = FirebaseDatabase.getInstance()
 
-            // Cek apakah ada fragment sebelumnya di dalam back stack
+        binding.backwardButton.setOnClickListener{
+            val fragmentManager = requireActivity().supportFragmentManager
             if (fragmentManager.backStackEntryCount > 0) {
-                // Navigasi kembali ke fragment sebelumnya
                 fragmentManager.popBackStack()
             } else {
-                // Tidak ada fragment sebelumnya dalam back stack, bisa tambahkan logika lain jika diperlukan
+                // Handle jika tidak ada fragment sebelumnya di back stack
             }
-
-            // Hancurkan fragment saat ini
             fragmentManager.beginTransaction().remove(this).commit()
         }
 
         binding.fab.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.grey)
 
-        // Function to validate email format using regex
+        // Function untuk validasi format email menggunakan regex
         fun isEmailValid(email: String): Boolean {
             val emailPattern = "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}"
             return email.matches(emailPattern.toRegex())
         }
 
-        // Add TextWatcher to monitor text input changes
+        // Add TextWatcher untuk memonitor perubahan input teks
         binding.textFieldEmail.editText?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -67,21 +67,33 @@ class Register3 : Fragment(){
             override fun afterTextChanged(s: Editable?) {}
         })
 
-        // Dalam onClickListener Anda
         binding.fab.setOnClickListener {
             val email = binding.textFieldEmail.editText?.text.toString().trim()
 
             if (isEmailValid(email)) {
-                // Email format valid, lakukan proses selanjutnya seperti pindah ke fragment lain
-                val intent = Intent(requireContext(), MainActivity::class.java)
-                startActivity(intent)
-                requireActivity().finish() // Optional, jika ingin menutup current activity setelah navigasi
+                // Email format valid, simpan ke Firebase Realtime Database
+                val userId = mAuth.currentUser?.uid
+                if (userId != null) {
+                    val userRef = database.getReference("users").child(userId)
+                    userRef.child("email").setValue(email)
+                        .addOnSuccessListener {
+                            Toast.makeText(requireContext(), "Email berhasil disimpan", Toast.LENGTH_SHORT).show()
+                            // Contoh navigasi ke activity lain setelah simpan berhasil
+                            val intent = Intent(requireContext(), MainActivity::class.java)
+                            startActivity(intent)
+                            requireActivity().finish() // Opsional, tutup activity saat ini setelah navigasi
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(requireContext(), "Gagal menyimpan email", Toast.LENGTH_SHORT).show()
+                        }
+                } else {
+                    Toast.makeText(requireContext(), "User tidak ditemukan", Toast.LENGTH_SHORT).show()
+                }
             } else {
                 // Email format tidak valid
                 Toast.makeText(requireContext(), "Format email tidak valid", Toast.LENGTH_SHORT).show()
             }
         }
-
     }
 
     override fun onDestroyView() {
