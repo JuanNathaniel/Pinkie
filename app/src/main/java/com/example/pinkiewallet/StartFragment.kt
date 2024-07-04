@@ -24,13 +24,13 @@ class StartFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding!!.lanjutkanButton.setOnClickListener { v ->
-            startActivity(
-                Intent(
-                    requireContext(),
-                    Register::class.java
-                )
-            )
+        binding.lanjutkanButton.setOnClickListener {
+            val loginregisterfragment = LoginRegister()
+            val transaction: FragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragment_container, loginregisterfragment)
+            transaction.addToBackStack(null) // Untuk menambahkan ke back stack, jika diperlukan
+            transaction.commit()
+
         }
     }
 
