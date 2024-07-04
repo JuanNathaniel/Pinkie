@@ -17,13 +17,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PinkieWallet"
+        tools:replace="android:label"
         tools:targetApi="31">
 
         <activity
             android:name=".StartActivity"
             android:windowSoftInputMode="adjustResize"
             android:exported="true"
-            android:label="">
+            android:label="Pinkie Wallet">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -33,11 +34,11 @@
         <activity
             android:name=".backend.Register"
             android:exported="false" />
-        
+
         <activity
             android:name=".backend.Login"
             android:exported="true" />
-        
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

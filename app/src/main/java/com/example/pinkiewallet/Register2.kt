@@ -1,6 +1,5 @@
 package com.example.pinkiewallet
 
-import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -15,18 +14,30 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.example.pinkiewallet.databinding.Register2Binding
-import com.google.android.material.internal.ViewUtils.showKeyboard
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 
-class Register2 : Fragment(){
+class Register2 : Fragment() {
 
     private var _binding: Register2Binding? = null
     private val binding get() = _binding!!
+
+    private lateinit var mAuth: FirebaseAuth
+    private lateinit var database: FirebaseDatabase
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = Register2Binding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        mAuth = FirebaseAuth.getInstance()
+        database = FirebaseDatabase.getInstance()
 
         val pinViews = listOf(
             binding.pinCircle1,
@@ -78,20 +89,36 @@ class Register2 : Fragment(){
             showKeyboard(binding.pinInput)
         }, 100)
 
-        binding.fab.setOnClickListener{
-            if (binding.pinInput.text.length == 6){
-                val register3Fragment = Register3()
-                val transaction: FragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
-                transaction.replace(R.id.fragment_container, register3Fragment)
-                transaction.addToBackStack(null) // Untuk menambahkan ke back stack, jika diperlukan
-                transaction.commit()
-                Toast.makeText(requireContext(), "Bisa nih mantap", Toast.LENGTH_SHORT).show()
+        binding.fab.setOnClickListener {
+            val pin = binding.pinInput.text.toString()
+
+            if (pin.length == 6) {
+                // Save PIN to Firebase Realtime Database
+                val userId = mAuth.currentUser?.uid
+                if (userId != null) {
+                    val userRef = database.getReference("users").child(userId)
+                    userRef.child("pin").setValue(pin)
+                        .addOnSuccessListener {
+                            Toast.makeText(requireContext(), "PIN berhasil disimpan", Toast.LENGTH_SHORT).show()
+                            // Move to next fragment or perform other actions
+                            val register3Fragment = Register3()
+                            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+                            transaction.replace(R.id.fragment_container, register3Fragment)
+                            transaction.addToBackStack(null) // To add to back stack if needed
+                            transaction.commit()
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(requireContext(), "Gagal menyimpan PIN", Toast.LENGTH_SHORT).show()
+                        }
+                } else {
+                    Toast.makeText(requireContext(), "User tidak ditemukan", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(requireContext(), "Harap masukkan 6 digit PIN", Toast.LENGTH_SHORT).show()
             }
         }
 
-        //
-        binding.backwardButton.setOnClickListener{
-            //do something
+        binding.backwardButton.setOnClickListener {
             // Mendapatkan instance dari FragmentManager
             val fragmentManager = requireActivity().supportFragmentManager
 
@@ -106,9 +133,8 @@ class Register2 : Fragment(){
             // Hancurkan fragment saat ini
             fragmentManager.beginTransaction().remove(this).commit()
         }
-
-        return binding.root
     }
+
     private fun updatePinCircles(pinViews: List<View>, s: CharSequence?) {
         for (i in pinViews.indices) {
             if (i < (s?.length ?: 0)) {
@@ -120,7 +146,7 @@ class Register2 : Fragment(){
     }
 
     private fun showKeyboard(view: View) {
-        val imm = requireContext().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        val imm = requireContext().getSystemService(InputMethodManager::class.java) as InputMethodManager
         view.post {
             imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
         }

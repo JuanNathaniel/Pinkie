@@ -1,5 +1,3 @@
-package com.example.pinkiewallet
-
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,13 +7,19 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
+import com.example.pinkiewallet.R
+import com.example.pinkiewallet.Register2
 import com.example.pinkiewallet.databinding.Register1Binding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 
-class Register1 : Fragment(){
+class Register1 : Fragment() {
 
     private var _binding: Register1Binding? = null
     private val binding get() = _binding!!
+
+    private lateinit var mAuth: FirebaseAuth
+    private lateinit var database: FirebaseDatabase
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,22 +32,24 @@ class Register1 : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-       binding.backwardButton.setOnClickListener{
-           //do something
-           // Mendapatkan instance dari FragmentManager
-           val fragmentManager = requireActivity().supportFragmentManager
+        mAuth = FirebaseAuth.getInstance()
+        database = FirebaseDatabase.getInstance()
 
-           // Cek apakah ada fragment sebelumnya di dalam back stack
-           if (fragmentManager.backStackEntryCount > 0) {
-               // Navigasi kembali ke fragment sebelumnya
-               fragmentManager.popBackStack()
-           } else {
-               // Tidak ada fragment sebelumnya dalam back stack, bisa tambahkan logika lain jika diperlukan
-           }
+        binding.backwardButton.setOnClickListener {
+            // Mendapatkan instance dari FragmentManager
+            val fragmentManager = requireActivity().supportFragmentManager
 
-           // Hancurkan fragment saat ini
-           fragmentManager.beginTransaction().remove(this).commit()
-       }
+            // Cek apakah ada fragment sebelumnya di dalam back stack
+            if (fragmentManager.backStackEntryCount > 0) {
+                // Navigasi kembali ke fragment sebelumnya
+                fragmentManager.popBackStack()
+            } else {
+                // Tidak ada fragment sebelumnya dalam back stack, bisa tambahkan logika lain jika diperlukan
+            }
+
+            // Hancurkan fragment saat ini
+            fragmentManager.beginTransaction().remove(this).commit()
+        }
 
         binding.fab.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.grey)
 
@@ -62,16 +68,32 @@ class Register1 : Fragment(){
             override fun afterTextChanged(s: Editable?) {}
         })
 
-        binding.fab.setOnClickListener{
-            if ((binding.textFieldName.editText?.text?.length ?: 0) >= 2){
-                val register2Fragment = Register2()
-                val transaction: FragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
-                transaction.replace(R.id.fragment_container, register2Fragment)
-                transaction.addToBackStack(null) // Untuk menambahkan ke back stack, jika diperlukan
-                transaction.commit()
-                Toast.makeText(requireContext(), "Bisa nih mantap", Toast.LENGTH_SHORT).show()
-            }else{
-                Toast.makeText(requireContext(), "Harus 2 huruf minimal deck", Toast.LENGTH_SHORT).show()
+        binding.fab.setOnClickListener {
+            val namaLengkap = binding.textFieldName.editText?.text?.toString()
+
+            if (!namaLengkap.isNullOrEmpty()) {
+                // Simpan data ke Firebase Realtime Database
+                val userId = mAuth.currentUser?.uid
+                if (userId != null) {
+                    val userRef = database.getReference("users").child(userId)
+                    userRef.child("nama_lengkap").setValue(namaLengkap)
+                        .addOnSuccessListener {
+                            Toast.makeText(requireContext(), "Data berhasil disimpan", Toast.LENGTH_SHORT).show()
+                            // Pindah ke fragment berikutnya atau lakukan aksi lainnya
+                            val register2Fragment = Register2()
+                            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+                            transaction.replace(R.id.fragment_container, register2Fragment)
+                            transaction.addToBackStack(null) // Untuk menambahkan ke back stack, jika diperlukan
+                            transaction.commit()
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(requireContext(), "Gagal menyimpan data", Toast.LENGTH_SHORT).show()
+                        }
+                } else {
+                    Toast.makeText(requireContext(), "User tidak ditemukan", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(requireContext(), "Harap masukkan nama lengkap", Toast.LENGTH_SHORT).show()
             }
         }
     }
