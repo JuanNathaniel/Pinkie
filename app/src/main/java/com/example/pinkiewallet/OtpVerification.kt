@@ -51,10 +51,15 @@ class OtpVerification : Fragment() {
 
         // Handle OTP EditText input changes
         val otpEditTexts = arrayOf(etOtp1, etOtp2, etOtp3, etOtp4, etOtp5, etOtp6)
-        for (editText in otpEditTexts) {
-            editText.addTextChangedListener(object : TextWatcher {
+        for (i in otpEditTexts.indices) {
+            otpEditTexts[i].addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(s: Editable?) {
                     validateOtpFields()
+                    if (s?.length == 1 && i < otpEditTexts.size - 1) {
+                        otpEditTexts[i + 1].requestFocus()
+                    } else if (s?.length == 0 && i > 0) {
+                        otpEditTexts[i - 1].requestFocus()
+                    }
                 }
 
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -94,8 +99,16 @@ class OtpVerification : Fragment() {
         val otp5 = etOtp5.text.toString()
         val otp6 = etOtp6.text.toString()
 
-        binding.btnVerify.isEnabled = otp1.isNotEmpty() && otp2.isNotEmpty() && otp3.isNotEmpty() &&
+        val isAllFieldsFilled = otp1.isNotEmpty() && otp2.isNotEmpty() && otp3.isNotEmpty() &&
                 otp4.isNotEmpty() && otp5.isNotEmpty() && otp6.isNotEmpty()
+
+        binding.btnVerify.isEnabled = isAllFieldsFilled
+
+        if (isAllFieldsFilled) {
+            binding.btnVerify.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.teal_200)
+        } else {
+            binding.btnVerify.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.grey)
+        }
     }
 
     private fun verifyOtpManually(otp: String) {

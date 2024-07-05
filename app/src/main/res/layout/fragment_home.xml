@@ -178,15 +178,15 @@
             android:layout_marginLeft="5dp" />
     </LinearLayout>
 
-
     <ImageButton
         android:id="@+id/eyebuttonopen"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:src="@drawable/ic_eyeopen"
         android:scaleType="fitCenter"
+        android:layout_toRightOf="@+id/pinkiecash"
         android:background="?attr/selectableItemBackground"
-        android:layout_marginLeft="205dp"
+        android:layout_marginLeft="15dp"
         android:layout_marginTop="290dp"
         android:gravity="center_vertical" />
 
@@ -197,12 +197,14 @@
         android:src="@drawable/ic_eyeclose"
         android:scaleType="fitCenter"
         android:background="?attr/selectableItemBackground"
-        android:layout_marginLeft="205dp"
+        android:layout_marginLeft="15dp"
+        android:layout_toRightOf="@+id/pinkiecash"
         android:layout_marginTop="290dp"
         android:gravity="center_vertical"
         android:visibility="gone"/>
 
     <TextView
+        android:id="@+id/pinkiecash"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="275dp"

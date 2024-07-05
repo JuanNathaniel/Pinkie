@@ -33,29 +33,33 @@
         android:layout_below="@id/tv_verify_account"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="24dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="190dp"
         android:src="@drawable/thinking" />
 
-    <TextView
-        android:id="@+id/tv_mobile_verification"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/iv_celebrate"
-        android:layout_marginTop="-57dp"
-        android:text="Mobile verification has\nsuccessfully done"
-        android:textAlignment="center"
-        android:textColor="@color/bone"
-        android:layout_centerHorizontal="true"
-        android:textSize="16sp" />
+<!--    <TextView-->
+<!--        android:id="@+id/tv_mobile_verification"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@id/iv_celebrate"-->
+<!--        android:layout_marginTop="-57dp"-->
+<!--        android:text="Mobile verification has\nsuccessfully done"-->
+<!--        android:textAlignment="center"-->
+<!--        android:textColor="@color/bone"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:textSize="16sp" />-->
 
     <TextView
         android:id="@+id/tv_otp_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_mobile_verification"
+        android:layout_below="@id/iv_celebrate"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
         android:text="We have sent the OTP on 8882356364\nwill apply auto to the fields"
         android:textAlignment="center"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="150dp"
+        android:layout_marginTop="-190dp"
         android:textColor="@color/bone"
         android:textSize="14sp" />
 
@@ -65,7 +69,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_otp_info"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="-155dp"
+        android:layout_marginBottom="80dp"
+        android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 
         <EditText
@@ -133,7 +139,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/otp_container"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="-83dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="60dp"
         android:text="If you didn't receive a code! "
         android:textColor="@android:color/darker_gray"
         android:textSize="14sp" />
@@ -145,19 +153,24 @@
         android:layout_below="@id/otp_container"
         android:layout_toRightOf="@id/tv_resend_info"
         android:text="Resend"
+        android:layout_marginLeft="25dp"
         android:textColor="@android:color/holo_red_light"
         android:textSize="14sp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="-83dp"
+        android:layout_marginBottom="63dp"
         android:textStyle="bold" />
 
     <Button
         android:id="@+id/btn_verify"
-        android:layout_width="wrap_content"
+        android:layout_width="270dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_resend_info"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="-45dp"
         android:background="@drawable/round_solid"
         android:text="Verify"
+        android:layout_alignParentBottom="true"
         android:textColor="@android:color/white"
         android:textSize="16sp" />
 

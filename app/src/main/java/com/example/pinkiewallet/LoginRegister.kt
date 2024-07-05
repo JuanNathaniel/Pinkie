@@ -185,7 +185,7 @@ class LoginRegister : Fragment() {
 
     private fun isPhoneNumberValid(phoneNumber: String): Boolean {
         // Replace this with your actual validation logic
-        return phoneNumber.length > 10 // Contoh validasi, misalnya nomor telepon harus 10 digit
+        return phoneNumber.length > 5 // Contoh validasi, misalnya nomor telepon harus 10 digit
     }
 
     override fun onDestroyView() {
