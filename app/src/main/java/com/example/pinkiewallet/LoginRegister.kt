@@ -1,6 +1,6 @@
 package com.example.pinkiewallet
 
-import OtpVerification
+import Register1
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -20,11 +20,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import java.util.concurrent.TimeUnit
 
 class LoginRegister : Fragment() {
@@ -56,42 +52,24 @@ class LoginRegister : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
 
-
         binding.lanjutkanButton.setOnClickListener{
-//            if (isPhoneNumberValid(binding.textFieldPhone.toString())) {
-//
-//                //disini kondisi pengecekan apakah nomor telepon ada di database atau engga
-//                val register1Fragment = Register1()
-//                val transaction: FragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
-//                transaction.replace(R.id.fragment_container, register1Fragment)
-//                transaction.addToBackStack(null) // Untuk menambahkan ke back stack, jika diperlukan
-//                transaction.commit()
-//                Toast.makeText(requireContext(), "Bisa nih mantap", Toast.LENGTH_SHORT).show()
-//            }
             if (!binding.textFieldPhone.isEmpty()) {
                 checkIfUserExists(binding.textFieldPhone.editText?.text.toString())
-//                bar.visibility = View.VISIBLE
-//                llOtp.visibility = View.VISIBLE
             } else {
                 Toast.makeText(requireContext(), "Ada Data Yang Masih Kosong", Toast.LENGTH_SHORT).show()
             }
         }
 
-        //
         binding.backwardButton.setOnClickListener{
             //do something
-            // Mendapatkan instance dari FragmentManager
             val fragmentManager = requireActivity().supportFragmentManager
 
-            // Cek apakah ada fragment sebelumnya di dalam back stack
             if (fragmentManager.backStackEntryCount > 0) {
-                // Navigasi kembali ke fragment sebelumnya
                 fragmentManager.popBackStack()
             } else {
                 // Tidak ada fragment sebelumnya dalam back stack, bisa tambahkan logika lain jika diperlukan
             }
 
-            // Hancurkan fragment saat ini
             fragmentManager.beginTransaction().remove(this).commit()
         }
 
@@ -99,11 +77,10 @@ class LoginRegister : Fragment() {
     }
 
     private fun checkIfUserExists(noHp: String) {
-        val database = FirebaseDatabase.getInstance().reference;
+        val database = FirebaseDatabase.getInstance().reference
 
         val userRef = database.child("users")
-        userRef.orderByChild("phone_number").equalTo(noHp).addListenerForSingleValueEvent(object :
-            ValueEventListener {
+        userRef.orderByChild("phone_number").equalTo(noHp).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.exists()) {
                     isNewUser = false
@@ -133,7 +110,6 @@ class LoginRegister : Fragment() {
     }
 
     private val mCallbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-
         override fun onVerificationCompleted(credential: PhoneAuthCredential) {
             loginByCredential(credential)
         }
@@ -147,8 +123,8 @@ class LoginRegister : Fragment() {
             super.onCodeSent(verificationId, token)
             Log.d("OTP", "Kode OTP terkirim: $verificationId")
             Toast.makeText(requireContext(), "Mengirim Kode OTP", Toast.LENGTH_SHORT).show()
-            // Tambahkan logika UI di sini jika diperlukan, misalnya tampilkan input OTP
-            val otpVerification = OtpVerification()
+            // Navigasi ke fragment OtpVerification
+            val otpVerification = OtpVerification.newInstance(verificationId)
             val transaction: FragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
             transaction.replace(R.id.fragment_container, otpVerification)
             transaction.addToBackStack(null) // Untuk menambahkan ke back stack, jika diperlukan
@@ -183,15 +159,19 @@ class LoginRegister : Fragment() {
                 if (task.isSuccessful) {
                     Log.d("FirebaseDB", "Nomor telepon berhasil disimpan untuk userId: $userId")
                     Toast.makeText(requireContext(), "Registrasi Berhasil", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(requireContext(), Register1::class.java))
-                    requireActivity().finish()
+
+                    // Move to next fragment or perform other actions
+                    val register1Fragment = Register1()
+                    val transaction = requireActivity().supportFragmentManager.beginTransaction()
+                    transaction.replace(R.id.fragment_container, register1Fragment)
+                    transaction.addToBackStack(null) // To add to back stack if needed
+                    transaction.commit()
                 } else {
                     Log.e("FirebaseDB", "Gagal menyimpan nomor telepon untuk userId: $userId", task.exception)
                     Toast.makeText(requireContext(), "Gagal menyimpan nomor telepon", Toast.LENGTH_SHORT).show()
                 }
             }
     }
-
 
     private fun validatePhoneNumber(phoneNumber: String) {
         if (isPhoneNumberValid(phoneNumber)) {

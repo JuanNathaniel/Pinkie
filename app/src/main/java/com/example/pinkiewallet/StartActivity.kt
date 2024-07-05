@@ -1,5 +1,6 @@
 package com.example.pinkiewallet
 
+import Register1
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

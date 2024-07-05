@@ -29,7 +29,7 @@
     <ImageView
         android:id="@+id/iv_celebrate"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="374dp"
         android:layout_below="@id/tv_verify_account"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="24dp"
@@ -40,11 +40,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/iv_celebrate"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="-57dp"
         android:text="Mobile verification has\nsuccessfully done"
         android:textAlignment="center"
         android:textColor="@color/bone"
+        android:layout_centerHorizontal="true"
         android:textSize="16sp" />
 
     <TextView
@@ -100,6 +100,24 @@
 
         <EditText
             android:id="@+id/et_otp_4"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            android:textSize="24sp" />
+        <EditText
+            android:id="@+id/et_otp_5"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            android:textSize="24sp" />
+        <EditText
+            android:id="@+id/et_otp_6"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
