@@ -189,6 +189,7 @@ class OtpVerification : Fragment() {
             usersRef.child(userId).child("phone_number").setValue(phoneNumber)
             usersRef.child(userId).child("balance").setValue(0)
             usersRef.child(userId).child("status").setValue("login")
+            usersRef.child(userId).child("point").setValue(0)
                 .addOnSuccessListener {
                     Log.d("OtpVerification", "Phone number saved to database")
                 }

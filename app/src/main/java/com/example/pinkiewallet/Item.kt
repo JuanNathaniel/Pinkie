@@ -1,3 +1,3 @@
 package com.example.pinkiewallet
 
-data class Item(val imageUrl: String)
+data class Item(val imageUrl: String, val s: String)

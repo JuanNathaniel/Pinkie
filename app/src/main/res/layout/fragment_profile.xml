@@ -23,6 +23,7 @@
             android:layout_marginStart="35dp" />
 
         <TextView
+            android:id="@+id/textName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="110dp"
@@ -33,6 +34,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/textPhoneNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="082132123456"
