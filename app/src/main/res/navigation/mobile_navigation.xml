@@ -7,16 +7,16 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.example.pinkiewallet.ui.home.HomeFragment"
+        android:name="com.example.pinkiewallet.view.ui.home.HomeFragment"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.example.pinkiewallet.ui.dashboard.DashboardFragment"
+        android:name="com.example.pinkiewallet.view.ui.dashboard.DashboardFragment"
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.example.pinkiewallet.ui.ProfileFragment.ProfileFragment"
+        android:name="com.example.pinkiewallet.view.ui.ProfileFragment.ProfileFragment"
         tools:layout="@layout/fragment_profile" />
 </navigation>

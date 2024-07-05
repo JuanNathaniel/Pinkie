@@ -1,4 +1,4 @@
-package com.example.pinkiewallet.ui.dashboard
+package com.example.pinkiewallet.view.ui.dashboard
 
 import android.os.Bundle
 import android.view.LayoutInflater

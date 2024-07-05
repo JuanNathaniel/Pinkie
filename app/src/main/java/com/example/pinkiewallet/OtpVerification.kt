@@ -1,6 +1,5 @@
 package com.example.pinkiewallet
 
-import Register1
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -15,6 +14,8 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.pinkiewallet.databinding.OtpVerificationBinding
+import com.example.pinkiewallet.view.activity.MainActivity
+import com.example.pinkiewallet.view.fragment.Register1
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.database.DataSnapshot

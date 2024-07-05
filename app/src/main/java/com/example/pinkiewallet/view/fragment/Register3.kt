@@ -1,4 +1,4 @@
-package com.example.pinkiewallet
+package com.example.pinkiewallet.view.fragment
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,6 +10,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.example.pinkiewallet.view.activity.MainActivity
+import com.example.pinkiewallet.R
 import com.example.pinkiewallet.databinding.Register3Binding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -46,7 +48,9 @@ class Register3 : Fragment(){
             fragmentManager.beginTransaction().remove(this).commit()
         }
 
-        binding.fab.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.grey)
+        binding.fab.backgroundTintList = ContextCompat.getColorStateList(requireContext(),
+            R.color.grey
+        )
 
         // Function untuk validasi format email menggunakan regex
         fun isEmailValid(email: String): Boolean {

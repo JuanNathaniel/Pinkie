@@ -1,10 +1,11 @@
-package com.example.pinkiewallet
+package com.example.pinkiewallet.view.activity
 
-import Register1
+import com.example.pinkiewallet.view.fragment.Register1
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
+import com.example.pinkiewallet.view.fragment.StartFragment
 import com.example.pinkiewallet.databinding.ActivityStartBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*

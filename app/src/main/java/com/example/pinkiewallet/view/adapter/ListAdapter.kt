@@ -1,13 +1,12 @@
-package com.example.pinkiewallet
+package com.example.pinkiewallet.view.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import android.widget.ImageView
-import android.widget.TextView
 import com.example.pinkiewallet.databinding.ListItemBinding
+import com.example.pinkiewallet.model.ListItem
 
 class ListAdapter(private val context: Context, private val listItems: List<ListItem>) : BaseAdapter() {
 
