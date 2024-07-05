@@ -1,13 +1,9 @@
-package com.example.pinkiewallet
+package com.example.pinkiewallet.view.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.pinkiewallet.ListItem
-import com.example.pinkiewallet.R
+import com.example.pinkiewallet.model.ListItem
 import com.example.pinkiewallet.databinding.ListItemBinding
 
 class VerticalAdapter(private val items: List<ListItem>, private val listener: (ListItem) -> Unit) : RecyclerView.Adapter<VerticalAdapter.ViewHolder>() {

@@ -1,10 +1,11 @@
-package com.example.pinkiewallet
+package com.example.pinkiewallet.view.adapter
 
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.pinkiewallet.model.Item
 import com.example.pinkiewallet.databinding.ItemHorizontalBinding
 
 class HorizontalAdapter(private val itemList: List<Item>) :

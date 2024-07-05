@@ -1,3 +1,5 @@
+package com.example.pinkiewallet.view.fragment
+
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,7 +11,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isEmpty
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import com.example.pinkiewallet.OtpVerification
 import com.example.pinkiewallet.R
 import com.example.pinkiewallet.databinding.LoginRegisterBinding
 import com.google.firebase.FirebaseException

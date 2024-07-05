@@ -1,4 +1,4 @@
-package com.example.pinkiewallet.ui.dashboard
+package com.example.pinkiewallet.view.ui.dashboard
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -1,4 +1,4 @@
-package com.example.pinkiewallet
+package com.example.pinkiewallet.view.fragment
 
 import android.os.Bundle
 import android.os.Handler
@@ -12,7 +12,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
+import com.example.pinkiewallet.R
 import com.example.pinkiewallet.databinding.Register2Binding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -50,7 +50,9 @@ class Register2 : Fragment() {
         )
 
         // Set initial background tint (example with grey)
-        binding.fab.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.grey)
+        binding.fab.backgroundTintList = ContextCompat.getColorStateList(requireContext(),
+            R.color.grey
+        )
         binding.fab.isEnabled = false
 
         binding.pinInput.addTextChangedListener(object : TextWatcher {
@@ -71,7 +73,9 @@ class Register2 : Fragment() {
                 // Check if PIN length is less than 6 after text change
                 if ((s?.length ?: 0) < 6) {
                     binding.fab.isEnabled = false
-                    binding.fab.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.grey)
+                    binding.fab.backgroundTintList = ContextCompat.getColorStateList(requireContext(),
+                        R.color.grey
+                    )
                 }
             }
         })

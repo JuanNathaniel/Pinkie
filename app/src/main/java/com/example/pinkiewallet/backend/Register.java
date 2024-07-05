@@ -16,8 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.pinkiewallet.R;
-import com.example.pinkiewallet.StartActivity;
-import com.example.pinkiewallet.StartFragment;
+import com.example.pinkiewallet.view.activity.StartActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
@@ -33,7 +32,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.concurrent.TimeUnit;
-import com.example.pinkiewallet.MainActivity;
+import com.example.pinkiewallet.view.activity.MainActivity;
 
 public class Register extends AppCompatActivity {
 

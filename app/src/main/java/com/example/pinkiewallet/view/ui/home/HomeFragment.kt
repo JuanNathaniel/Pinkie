@@ -1,4 +1,4 @@
-package com.example.pinkiewallet.ui.home
+package com.example.pinkiewallet.view.ui.home
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.pinkiewallet.HorizontalAdapter
-import com.example.pinkiewallet.Item
+import com.example.pinkiewallet.view.adapter.HorizontalAdapter
+import com.example.pinkiewallet.model.Item
 import com.example.pinkiewallet.backend.CreateQR
 import com.example.pinkiewallet.backend.TransferActivity
 import com.example.pinkiewallet.databinding.FragmentHomeBinding
