@@ -76,4 +76,6 @@ dependencies {
     implementation("com.google.android.gms:play-services-vision:20.1.3")
     implementation("com.google.zxing:core:3.4.1")
     implementation("com.journeyapps:zxing-android-embedded:4.1.0")
+    implementation ("org.bouncycastle:bcprov-jdk15on:1.68")
+
 }

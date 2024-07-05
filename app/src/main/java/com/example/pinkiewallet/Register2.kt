@@ -16,6 +16,7 @@ import androidx.fragment.app.FragmentTransaction
 import com.example.pinkiewallet.databinding.Register2Binding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import java.security.MessageDigest
 
 class Register2 : Fragment() {
 
@@ -93,11 +94,14 @@ class Register2 : Fragment() {
             val pin = binding.pinInput.text.toString()
 
             if (pin.length == 6) {
-                // Save PIN to Firebase Realtime Database
+                // Hash the PIN before saving
+                val hashedPin = hashPin(pin)
+
+                // Save hashed PIN to Firebase Realtime Database
                 val userId = mAuth.currentUser?.uid
                 if (userId != null) {
                     val userRef = database.getReference("users").child(userId)
-                    userRef.child("pin").setValue(pin)
+                    userRef.child("pin").setValue(hashedPin)
                         .addOnSuccessListener {
                             Toast.makeText(requireContext(), "PIN berhasil disimpan", Toast.LENGTH_SHORT).show()
                             // Move to next fragment or perform other actions
@@ -150,6 +154,12 @@ class Register2 : Fragment() {
         view.post {
             imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
         }
+    }
+
+    private fun hashPin(pin: String): String {
+        val digest = MessageDigest.getInstance("SHA-256")
+        val hashBytes = digest.digest(pin.toByteArray(Charsets.UTF_8))
+        return hashBytes.joinToString("") { "%02x".format(it) }
     }
 
     override fun onDestroyView() {

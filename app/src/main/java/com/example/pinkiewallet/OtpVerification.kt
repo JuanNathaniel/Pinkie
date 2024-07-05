@@ -1,9 +1,11 @@
 package com.example.pinkiewallet
 
+import Register1
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +17,10 @@ import androidx.fragment.app.Fragment
 import com.example.pinkiewallet.databinding.OtpVerificationBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthProvider
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class OtpVerification : Fragment() {
 
@@ -22,6 +28,7 @@ class OtpVerification : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var verificationId: String
+    private lateinit var phoneNumber: String
     private lateinit var etOtp1: EditText
     private lateinit var etOtp2: EditText
     private lateinit var etOtp3: EditText
@@ -85,11 +92,13 @@ class OtpVerification : Fragment() {
             requireActivity().supportFragmentManager.popBackStack()
         }
 
-        // Get verification ID from arguments
+        // Get verification ID and phone number from arguments
         verificationId = requireArguments().getString("verificationId").toString()
+        phoneNumber = requireArguments().getString("phoneNumber").toString()
 
         return binding.root
     }
+
 
     private fun validateOtpFields() {
         val otp1 = etOtp1.text.toString()
@@ -118,14 +127,85 @@ class OtpVerification : Fragment() {
                 if (task.isSuccessful) {
                     // OTP verification successful
                     Toast.makeText(requireContext(), "Verifikasi Berhasil", Toast.LENGTH_SHORT).show()
-                    // Redirect to MainActivity or other actions
-                    startActivity(Intent(requireContext(), MainActivity::class.java))
-                    requireActivity().finish()
+                    val phoneNumber = arguments?.getString("phoneNumber") ?: ""
+                    checkUserExistence(phoneNumber)
                 } else {
                     // OTP verification failed
                     Toast.makeText(requireContext(), "Verifikasi Gagal", Toast.LENGTH_SHORT).show()
                 }
             }
+    }
+
+    private fun checkUserExistence(phoneNumber: String) {
+        val database = FirebaseDatabase.getInstance()
+        val usersRef = database.getReference("users")
+        val query = usersRef.orderByChild("phone_number").equalTo(phoneNumber)
+
+        query.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    for (userSnapshot in snapshot.children) {
+                        val status = userSnapshot.child("status").getValue(String::class.java)
+                        if (status == "login") {
+                            // User is already logged in on another device
+                            Toast.makeText(requireContext(), "User already logged in on another device", Toast.LENGTH_SHORT).show()
+                        } else {
+                            val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+                            if (userId.isNotEmpty()) {
+                                val database = FirebaseDatabase.getInstance()
+                                val usersRef = database.getReference("users")
+                                usersRef.child(userId).child("status").setValue("login")
+                                navigateToMainActivity()
+                            }
+                        }
+                    }
+                } else {
+                    savePhoneNumberToDatabase(phoneNumber)
+                    navigateToRegister1(phoneNumber)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("OtpVerification", "Failed to check user existence: ${error.message}")
+                Toast.makeText(requireContext(), "Failed to check user existence", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+
+    private fun navigateToRegister1(phoneNumber: String) {
+        val fragment = Register1()
+        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_container, fragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
+    }
+
+    private fun savePhoneNumberToDatabase(phoneNumber: String) {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+        if (userId.isNotEmpty()) {
+            val database = FirebaseDatabase.getInstance()
+            val usersRef = database.getReference("users")
+            usersRef.child(userId).child("phone_number").setValue(phoneNumber)
+            usersRef.child(userId).child("balance").setValue(0)
+            usersRef.child(userId).child("status").setValue("login")
+                .addOnSuccessListener {
+                    Log.d("OtpVerification", "Phone number saved to database")
+                }
+                .addOnFailureListener { e ->
+                    Log.e("OtpVerification", "Error saving phone number to database", e)
+                    Toast.makeText(requireContext(), "Failed to save phone number", Toast.LENGTH_SHORT).show()
+                }
+        } else {
+            Log.e("OtpVerification", "User ID is empty")
+        }
+    }
+
+
+
+    private fun navigateToMainActivity() {
+        startActivity(Intent(requireContext(), MainActivity::class.java))
+        requireActivity().finish()
     }
 
     override fun onDestroyView() {
@@ -134,12 +214,14 @@ class OtpVerification : Fragment() {
     }
 
     companion object {
-        fun newInstance(verificationId: String): OtpVerification {
+        fun newInstance(verificationId: String, phoneNumber: String): OtpVerification {
             val fragment = OtpVerification()
             val args = Bundle()
             args.putString("verificationId", verificationId)
+            args.putString("phoneNumber", phoneNumber)
             fragment.arguments = args
             return fragment
         }
     }
+
 }

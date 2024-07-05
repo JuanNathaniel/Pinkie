@@ -23,6 +23,7 @@
 
         <activity
             android:name=".StartActivity"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize"
             android:exported="true"
             android:label="Pinkie Wallet">
