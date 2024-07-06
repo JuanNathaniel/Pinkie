@@ -41,6 +41,9 @@ android {
 }
 
 dependencies {
+    // Firebase Messaging
+    implementation("com.google.firebase:firebase-messaging:23.0.0")
+
     // Firebase Dependencies
     implementation(platform("com.google.firebase:firebase-bom:33.1.1"))
     implementation("com.google.firebase:firebase-auth-ktx")

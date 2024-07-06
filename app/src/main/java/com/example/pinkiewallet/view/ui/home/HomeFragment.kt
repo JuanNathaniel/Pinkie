@@ -65,10 +65,10 @@ class HomeFragment : Fragment() {
         val itemList: MutableList<Item> = ArrayList()
 
         // Example items for Insight RecyclerView
-        itemList.add(Item("Item 1", "https://www.ukulele.co.nz/wp-content/uploads/2020/11/Iklan-mcdonalds.jpg"))
-        itemList.add(Item("Item 2", "https://kledo.com/blog/wp-content/uploads/2022/01/iklan-produk.jpg"))
-        itemList.add(Item("Item 3", "https://cdn-image.hipwee.com/wp-content/uploads/2020/06/hipwee-floridina-01.jpg"))
-        itemList.add(Item("Item 4", "https://lh5.googleusercontent.com/YOVjx5EeT8vtVEge-HV6TSWRe2wyxPsaWvtiWl6u9jrAIoEnEwfLHZX9NVNZlUYdpG3sqTwWgdljrkGyw5jTv3qAXhgVSdws2I6SChKFVWP2i7ABXiz4s60lTYXsFHWKOQUhrrdjTqP4g0RY-T_gDiU"))
+        itemList.add(Item("https://www.ukulele.co.nz/wp-content/uploads/2020/11/Iklan-mcdonalds.jpg"))
+        itemList.add(Item("https://kledo.com/blog/wp-content/uploads/2022/01/iklan-produk.jpg"))
+        itemList.add(Item("https://cdn-image.hipwee.com/wp-content/uploads/2020/06/hipwee-floridina-01.jpg"))
+        itemList.add(Item("https://lh5.googleusercontent.com/YOVjx5EeT8vtVEge-HV6TSWRe2wyxPsaWvtiWl6u9jrAIoEnEwfLHZX9NVNZlUYdpG3sqTwWgdljrkGyw5jTv3qAXhgVSdws2I6SChKFVWP2i7ABXiz4s60lTYXsFHWKOQUhrrdjTqP4g0RY-T_gDiU"))
 
         if (itemList.isEmpty()) {
             // Daftar item kosong, lakukan sesuatu di sini jika diperlukan
