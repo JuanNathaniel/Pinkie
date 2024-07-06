@@ -1,6 +1,6 @@
 package com.example.pinkiewallet.model
 
 
-interface Observer<T> {
-    fun update(data: T)
+interface Observer {
+    fun update(message: String)
 }
