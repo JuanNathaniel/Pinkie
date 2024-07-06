@@ -2,6 +2,7 @@ package com.example.pinkiewallet.view.ui.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,15 +14,18 @@ import com.example.pinkiewallet.model.Item
 import com.example.pinkiewallet.backend.CreateQR
 import com.example.pinkiewallet.backend.TransferActivity
 import com.example.pinkiewallet.databinding.FragmentHomeBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 
 class HomeFragment : Fragment() {
-//    private lateinit var binding : FragmentHomeBinding
 
     private var _binding: FragmentHomeBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
+
+    private lateinit var mAuth: FirebaseAuth
+    private lateinit var database: FirebaseDatabase
+    private lateinit var usersRef: DatabaseReference
+    private lateinit var balanceListener: ValueEventListener
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,30 +35,36 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        //Favorite Transaction
+        mAuth = FirebaseAuth.getInstance()
+        database = FirebaseDatabase.getInstance()
+        usersRef = database.getReference("users")
+
+        initUI()
+        initFirebase()
+
+        return root
+    }
+
+    private fun initUI() {
+        // Initialize RecyclerView for Favorite Transaction
         val horizontalRecyclerViewFav = binding.horizontalRecyclerViewFavoriteTransaction
         val itemListFav: MutableList<Item> = ArrayList()
-        // Tambahkan item ke dalam daftar
-//        itemListFav.add("Item 1")
-//        itemListFav.add("Item 2")
-//        itemListFav.add("Item 3")
-//        itemListFav.add("Item 4")
-        //cek favorite transaction kosong atau tidak
-        if (itemListFav.isEmpty()) {
-            // Daftar item kosong, lakukan sesuatu di sini jika diperlukan
-//            Toast.makeText(requireContext(), "Daftar Transaksi Favorit Kosong", Toast.LENGTH_SHORT).show()
-            binding.emptyListTextView.visibility = View.VISIBLE
-        } else {
-            val adapter = HorizontalAdapter(itemListFav)
-            horizontalRecyclerViewFav.layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            horizontalRecyclerViewFav.adapter = adapter
-        }
 
-        //Insight
+        // Example items for Favorite Transaction RecyclerView
+//        itemListFav.add(Item("https://www.example.com/image1.jpg"))
+//        itemListFav.add(Item("https://www.example.com/image2.jpg"))
+        // Add more items as needed
+
+        val favTransactionAdapter = HorizontalAdapter(itemListFav)
+        horizontalRecyclerViewFav.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        horizontalRecyclerViewFav.adapter = favTransactionAdapter
+
+        // Initialize RecyclerView for Insight
         val horizontalRecyclerView = binding.horizontalRecyclerView
         val itemList: MutableList<Item> = ArrayList()
-        // Tambahkan item ke dalam daftar
+
+        // Example items for Insight RecyclerView
         itemList.add(Item("https://www.ukulele.co.nz/wp-content/uploads/2020/11/Iklan-mcdonalds.jpg"))
         itemList.add(Item("https://kledo.com/blog/wp-content/uploads/2022/01/iklan-produk.jpg"))
         itemList.add(Item("https://cdn-image.hipwee.com/wp-content/uploads/2020/06/hipwee-floridina-01.jpg"))
@@ -65,15 +75,18 @@ class HomeFragment : Fragment() {
             // Toast.makeText(this, "Daftar item kosong", Toast.LENGTH_SHORT).show()
             binding.emptyListInsight.visibility = View.VISIBLE
         } else {
-           val adapter = HorizontalAdapter(itemList)
+            val adapter = HorizontalAdapter(itemList)
             horizontalRecyclerView.layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             horizontalRecyclerView.adapter = adapter
         }
+        val insightAdapter = HorizontalAdapter(itemList)
+        horizontalRecyclerView.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        horizontalRecyclerView.adapter = insightAdapter
 
-        //Ini view/unview saldo
-        binding.eyebuttonopen.setOnClickListener{
-            //Tidak tampilkan saldo
+        // Handle eye button to show/hide saldo
+        binding.eyebuttonopen.setOnClickListener {
             binding.eyebuttonopen.visibility = View.INVISIBLE
             binding.eyebuttonclose.visibility = View.VISIBLE
             binding.listcirclecash.visibility = View.VISIBLE
@@ -81,8 +94,8 @@ class HomeFragment : Fragment() {
             binding.closepoints.visibility = View.VISIBLE
             binding.openpoints.visibility = View.INVISIBLE
         }
-        binding.eyebuttonclose.setOnClickListener{
-            //tampilkan saldo
+
+        binding.eyebuttonclose.setOnClickListener {
             binding.eyebuttonclose.visibility = View.INVISIBLE
             binding.eyebuttonopen.visibility = View.VISIBLE
             binding.cash.visibility = View.VISIBLE
@@ -91,23 +104,58 @@ class HomeFragment : Fragment() {
             binding.closepoints.visibility = View.INVISIBLE
         }
 
-        //Ini tuh menu menu yang diatas
-        binding.topupbt.setOnClickListener{
+        // Handle top up button click
+        binding.topupbt.setOnClickListener {
             val intent = Intent(requireContext(), CreateQR::class.java)
             startActivity(intent)
         }
-        binding.transferbt.setOnClickListener{
+
+        // Handle transfer button click
+        binding.transferbt.setOnClickListener {
             val intent = Intent(requireContext(), TransferActivity::class.java)
             startActivity(intent)
         }
-        binding.withdrawbt.setOnClickListener{
+
+        // Handle withdraw button click
+        binding.withdrawbt.setOnClickListener {
             Toast.makeText(requireContext(), "Upcoming Feature", Toast.LENGTH_SHORT).show()
         }
-        binding.historybt.setOnClickListener{
-            Toast.makeText(requireContext(), "This is History tante", Toast.LENGTH_SHORT).show()
-        }
 
-        return root
+        // Handle history button click
+        binding.historybt.setOnClickListener {
+            Toast.makeText(requireContext(), "This is History", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun initFirebase() {
+        val userId = mAuth.currentUser?.uid
+        if (userId != null) {
+            // Create and add ValueEventListener for balance
+            balanceListener = createBalanceListener()
+            usersRef.child(userId).addValueEventListener(balanceListener)
+        } else {
+            Toast.makeText(requireContext(), "User not authenticated", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun createBalanceListener(): ValueEventListener {
+        return object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    val balance = dataSnapshot.child("balance").getValue(Long::class.java)
+                    val points = dataSnapshot.child("point").getValue(Long::class.java)
+                    binding.cash.text = balance?.toString() ?: "0"
+                    binding.openpoints.text = points?.toString() ?: "0"
+                } else {
+                    Toast.makeText(requireContext(), "User not found", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e("FirebaseDB", "Failed to retrieve balance", databaseError.toException())
+                Toast.makeText(requireContext(), "Failed to retrieve balance", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     override fun onDestroyView() {
