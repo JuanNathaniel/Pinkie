@@ -1,122 +1,115 @@
-package com.example.pinkiewallet.backend;
+package com.example.pinkiewallet.backend
 
+import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.example.pinkiewallet.R
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ServerValue
+import com.google.firebase.database.ValueEventListener
 
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.*;
-import com.example.pinkiewallet.R;
+class TransferActivity : AppCompatActivity() {
+    private lateinit var etRecipientPhone: EditText
+    private lateinit var etAmount: EditText
+    private lateinit var btnTransfer: Button
 
-public class TransferActivity extends AppCompatActivity {
+    private lateinit var mAuth: FirebaseAuth
+    private lateinit var database: DatabaseReference
 
-    private EditText etRecipientPhone, etAmount;
-    private Button btnTransfer;
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_transfer)
 
-    private FirebaseAuth mAuth;
-    private DatabaseReference database;
+        etRecipientPhone = findViewById(R.id.etRecipientPhone)
+        etAmount = findViewById(R.id.etAmount)
+        btnTransfer = findViewById(R.id.btnTransfer)
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_transfer);
-
-        etRecipientPhone = findViewById(R.id.etRecipientPhone);
-        etAmount = findViewById(R.id.etAmount);
-        btnTransfer = findViewById(R.id.btnTransfer);
-
-        mAuth = FirebaseAuth.getInstance();
-        database = FirebaseDatabase.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance()
+        database = FirebaseDatabase.getInstance().reference
 
         // Ambil nomor telepon dari intent dan set ke etRecipientPhone
-        String phoneNumber = getIntent().getStringExtra("nomor_telepon");
+        val phoneNumber = intent.getStringExtra("nomor_telepon")
         if (phoneNumber != null) {
-            etRecipientPhone.setText(phoneNumber);
+            etRecipientPhone.setText(phoneNumber)
         }
 
-        btnTransfer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String recipientPhone = etRecipientPhone.getText().toString();
-                String amountStr = etAmount.getText().toString();
+        btnTransfer.setOnClickListener {
+            val recipientPhone = etRecipientPhone.text.toString()
+            val amountStr = etAmount.text.toString()
 
-                if (recipientPhone.isEmpty() || amountStr.isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "Semua kolom harus diisi", Toast.LENGTH_SHORT).show();
-                } else {
-                    int amount = Integer.parseInt(amountStr);
-                    transferMoney(recipientPhone, amount);
-                }
+            if (recipientPhone.isEmpty() || amountStr.isEmpty()) {
+                Toast.makeText(applicationContext, "Semua kolom harus diisi", Toast.LENGTH_SHORT).show()
+            } else {
+                val amount = amountStr.toInt()
+                transferMoney(recipientPhone, amount)
             }
-        });
+        }
     }
 
-    private void transferMoney(String recipientPhone, int amount) {
-        String senderId = mAuth.getCurrentUser().getUid();
+    private fun transferMoney(recipientPhone: String, amount: Int) {
+        val senderId = mAuth.currentUser?.uid ?: return
 
-        database.child("users").child(senderId).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        database.child("users").child(senderId).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    Integer senderBalanceObj = dataSnapshot.child("balance").getValue(Integer.class);
-                    if (senderBalanceObj != null) {
-                        int senderBalance = senderBalanceObj;
-
+                    val senderBalance = dataSnapshot.child("balance").getValue(Int::class.java)
+                    if (senderBalance != null) {
                         if (senderBalance >= amount) {
-                            DatabaseReference recipientRef = database.child("users");
-                            recipientRef.orderByChild("phone_number").equalTo(recipientPhone).addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot recipientSnapshot) {
+                            val recipientRef = database.child("users")
+                            recipientRef.orderByChild("phone_number").equalTo(recipientPhone).addListenerForSingleValueEvent(object : ValueEventListener {
+                                override fun onDataChange(recipientSnapshot: DataSnapshot) {
                                     if (recipientSnapshot.exists()) {
-                                        String recipientId = recipientSnapshot.getChildren().iterator().next().getKey();
-                                        Integer recipientBalanceObj = recipientSnapshot.child(recipientId).child("balance").getValue(Integer.class);
-                                        if (recipientBalanceObj != null) {
-                                            int recipientBalance = recipientBalanceObj;
-
+                                        val recipientId = recipientSnapshot.children.iterator().next().key
+                                        val recipientBalance = recipientId?.let {
+                                            recipientSnapshot.child(it).child("balance").getValue(Int::class.java)
+                                        }
+                                        if (recipientBalance != null) {
                                             // Update sender and recipient balances
-                                            database.child("users").child(senderId).child("balance").setValue(senderBalance - amount);
-                                            database.child("users").child(recipientId).child("balance").setValue(recipientBalance + amount);
+                                            database.child("users").child(senderId).child("balance").setValue(senderBalance - amount)
+                                            database.child("users").child(recipientId).child("balance").setValue(recipientBalance + amount)
 
                                             // Save transaction record
-                                            DatabaseReference transactionRef = database.child("transactions").push();
-                                            transactionRef.child("from").setValue(senderId);
-                                            transactionRef.child("to").setValue(recipientId);
-                                            transactionRef.child("amount").setValue(amount);
-                                            transactionRef.child("timestamp").setValue(ServerValue.TIMESTAMP);
+                                            val transactionRef = database.child("transactions").push()
+                                            transactionRef.child("from").setValue(senderId)
+                                            transactionRef.child("to").setValue(recipientId)
+                                            transactionRef.child("amount").setValue(amount)
+                                            transactionRef.child("timestamp").setValue(ServerValue.TIMESTAMP)
 
-                                            Toast.makeText(getApplicationContext(), "Transfer berhasil", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(applicationContext, "Transfer berhasil", Toast.LENGTH_SHORT).show()
                                         } else {
-                                            Toast.makeText(getApplicationContext(), "Saldo penerima tidak ditemukan", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(applicationContext, "Saldo penerima tidak ditemukan", Toast.LENGTH_SHORT).show()
                                         }
                                     } else {
-                                        Toast.makeText(getApplicationContext(), "Nomor penerima tidak ditemukan", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(applicationContext, "Nomor penerima tidak ditemukan", Toast.LENGTH_SHORT).show()
                                     }
                                 }
 
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-                                    Log.e("FirebaseDB", "Gagal mencari nomor penerima", databaseError.toException());
+                                override fun onCancelled(databaseError: DatabaseError) {
+                                    Log.e("FirebaseDB", "Gagal mencari nomor penerima", databaseError.toException())
                                 }
-                            });
+                            })
                         } else {
-                            Toast.makeText(getApplicationContext(), "Saldo tidak cukup", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(applicationContext, "Saldo tidak cukup", Toast.LENGTH_SHORT).show()
                         }
                     } else {
-                        Toast.makeText(getApplicationContext(), "Saldo pengirim tidak ditemukan", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(applicationContext, "Saldo pengirim tidak ditemukan", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(getApplicationContext(), "Pengirim tidak ditemukan", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(applicationContext, "Pengirim tidak ditemukan", Toast.LENGTH_SHORT).show()
                 }
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e("FirebaseDB", "Gagal mencari saldo pengirim", databaseError.toException());
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e("FirebaseDB", "Gagal mencari saldo pengirim", databaseError.toException())
             }
-        });
+        })
     }
 }

@@ -6,7 +6,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
-
+    <TextView
+        android:id="@+id/subtitle"
+        android:layout_width="369dp"
+        android:layout_height="206dp"
+        android:text=" Transaksi Berhasiil, kamu membayar sebesar"
+        android:textColor="@color/black"
+        android:textSize="28dp" />
 
     <EditText
         android:id="@+id/HasilTotal"

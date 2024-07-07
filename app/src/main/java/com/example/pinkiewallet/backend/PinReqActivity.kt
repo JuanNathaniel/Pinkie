@@ -1,56 +1,125 @@
-package com.example.pinkiewallet.backend;
+package com.example.pinkiewallet.backend
 
+import PinViewModel
+import android.content.Intent
+import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
+import android.view.View
+import android.view.ViewTreeObserver
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import com.example.pinkiewallet.R
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.security.MessageDigest
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.widget.Toast;
+class PinReqActivity : AppCompatActivity() {
 
-import androidx.appcompat.app.AppCompatActivity;
+    private lateinit var pinInput: EditText
+    private lateinit var fab: FloatingActionButton
+    private var jumlahHarga: Int = 0
 
-import com.example.pinkiewallet.R;
-import com.hanks.passcodeview.PasscodeView;
+    private val pinViewModel: PinViewModel by viewModels()
 
-public class PinReqActivity extends AppCompatActivity {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.pin_req)
 
-    private PasscodeView passcodeView;
+        jumlahHarga = intent.getIntExtra("jumlah_harga", 0)
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.pin_req);
+        pinInput = findViewById(R.id.pin_input)
+        fab = findViewById(R.id.fab)
 
-        // Mengambil nilai jumlah harga dari intent
-        int jumlahHarga = getIntent().getIntExtra("jumlah_harga", 0);
+        pinInput.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                pinInput.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                pinInput.requestFocus()
+                showKeyboard(pinInput)
+            }
+        })
 
-        // Mengambil referensi PasscodeView dari layout XML
-        passcodeView = findViewById(R.id.passcodeview);
+        fab.setOnClickListener {
+            val pin = pinInput.text.toString()
+            if (pin.length == 6) {
+                val hashedPin = hashPin(pin)
+                pinViewModel.verifyPin(pin, hashedPin)
+            } else {
+                Toast.makeText(this, "Please enter a 6-digit PIN", Toast.LENGTH_SHORT).show()
+                showKeyboard(pinInput)
+            }
+        }
 
-        // Memeriksa apakah passcodeView tidak null sebelum menggunakan
-        if (passcodeView != null) {
-            // Set passcode length
-            passcodeView.setPasscodeLength(5);
-            // Menetapkan kode passcode statis
-            passcodeView.setLocalPasscode("12369");
-            // Menetapkan listener untuk menangani keberhasilan atau kegagalan
-            passcodeView.setListener(new PasscodeView.PasscodeViewListener() {
-                @Override
-                public void onFail() {
-                    // Menampilkan pesan kesalahan jika passcode salah
-                    Toast.makeText(PinReqActivity.this, "Password is wrong!", Toast.LENGTH_SHORT).show();
-                }
+        pinInput.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                updatePinCircles(s)
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
 
-                @Override
-                public void onSuccess(String number) {
-                    // Panggil method untuk membuka aktivitas Pembayaran
-                    openPaymentActivity(jumlahHarga);
-                }
-            });
+        pinViewModel.pinVerificationResult.observe(this, Observer { isVerified ->
+            if (isVerified) {
+                Toast.makeText(this, "PIN verified successfully", Toast.LENGTH_SHORT).show()
+                pinViewModel.updateBalance(jumlahHarga)
+            } else {
+                Toast.makeText(this, "Incorrect PIN", Toast.LENGTH_SHORT).show()
+                showKeyboard(pinInput)
+            }
+        })
+
+        pinViewModel.balanceUpdateResult.observe(this, Observer { isSuccess ->
+            if (isSuccess) {
+                Toast.makeText(this, "Balance updated successfully", Toast.LENGTH_SHORT).show()
+                openPaymentActivity(jumlahHarga)
+            } else {
+                Toast.makeText(this, "Failed to update balance", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun updatePinCircles(pin: CharSequence?) {
+        val pinCircles = listOf<View>(
+            findViewById(R.id.pin_circle_1),
+            findViewById(R.id.pin_circle_2),
+            findViewById(R.id.pin_circle_3),
+            findViewById(R.id.pin_circle_4),
+            findViewById(R.id.pin_circle_5),
+            findViewById(R.id.pin_circle_6)
+        )
+
+        for (i in pinCircles.indices) {
+            if (i < pin?.length ?: 0) {
+                pinCircles[i].setBackgroundResource(R.drawable.circle_filled)
+            } else {
+                pinCircles[i].setBackgroundResource(R.drawable.circle_background)
+            }
         }
     }
 
-    private void openPaymentActivity(int jumlahHarga) {
-        Intent paymentIntent = new Intent(this, Payment.class);
-        paymentIntent.putExtra("jumlah_harga", jumlahHarga);
-        startActivity(paymentIntent);
+    private fun hashPin(pin: String): String {
+        val digest = MessageDigest.getInstance("SHA-256")
+        val hashBytes = digest.digest(pin.toByteArray(Charsets.UTF_8))
+        return hashBytes.joinToString("") { "%02x".format(it) }
+    }
+
+
+
+    private fun showKeyboard(view: View) {
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        view.post {
+            imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
+        }
+    }
+
+    private fun openPaymentActivity(jumlahHarga: Int) {
+        val paymentIntent = Intent(this, Payment::class.java)
+        paymentIntent.putExtra("jumlah_harga", jumlahHarga)
+        startActivity(paymentIntent)
+        finish()
     }
 }

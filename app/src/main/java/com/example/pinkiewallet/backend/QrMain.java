@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.pinkiewallet.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -17,15 +18,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.hanks.passcodeview.PasscodeView;
 
 public class QrMain extends AppCompatActivity {
-    Button btnScanBarcode;
     EditText resultText;
     EditText HasilTotal;
-    int dummy;
+    int balance; // Mengganti variabel dummy menjadi balance yang merepresentasikan saldo user
     private Button openButton;
-    private PasscodeView passcodeView;
 
     private FirebaseAuth mAuth;
     private DatabaseReference databaseReference;
@@ -35,7 +33,6 @@ public class QrMain extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.qr_main);
 
-        btnScanBarcode = findViewById(R.id.btnScanBarcode);
         resultText = findViewById(R.id.result_text);
         HasilTotal = findViewById(R.id.HasilTotal);
         openButton = findViewById(R.id.btnConfirmBayar);
@@ -45,22 +42,40 @@ public class QrMain extends AppCompatActivity {
 
         getBalanceFromDatabase();
 
-        btnScanBarcode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(QrMain.this, ScannedBarcodeActivity.class);
-                scanBarcodeLauncher.launch(intent);
-            }
-        });
+        // Get the scanned data from intent
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra("intentData")) {
+            String intentData = intent.getStringExtra("intentData");
+            resultText.setText(intentData);
 
-        openButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(QrMain.this, PinReqActivity.class);
-                intent.putExtra("dummyValue", dummy);
-                startActivity(intent); // Memulai PinReqActivity
+            if (isPrice(intentData)) {
+                int jumlahHarga = Integer.parseInt(intentData);
+                HasilTotal.setText(String.valueOf(jumlahHarga));
+
+                // Navigate to Payment after confirmation button clicked
+                openButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (balance >= jumlahHarga) {
+                            navigateToPayment(jumlahHarga);
+                        } else {
+                            Toast.makeText(QrMain.this, "Insufficient balance", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            } else if (isPhoneNumber(intentData)) {
+                // Navigate to Transfer after confirmation button clicked
+                openButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        navigateToTransfer(intentData);
+                    }
+                });
+            } else {
+                // Handle invalid QR code
+                resultText.setText("Invalid QR Code");
             }
-        });
+        }
     }
 
     private void getBalanceFromDatabase() {
@@ -72,11 +87,11 @@ public class QrMain extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {
-                        dummy = snapshot.getValue(Integer.class);
-                        HasilTotal.setText(String.valueOf(dummy));
+                        balance = snapshot.getValue(Integer.class); // Mengambil nilai balance dari database
+                        HasilTotal.setText(String.valueOf(balance));
                     } else {
                         // Handle the case where balance doesn't exist in the database
-                        dummy = 0;
+                        balance = 0;
                         HasilTotal.setText("0");
                     }
                 }
@@ -85,40 +100,12 @@ public class QrMain extends AppCompatActivity {
                 public void onCancelled(@NonNull DatabaseError error) {
                     // Handle database error
                     error.toException().printStackTrace();
-                    dummy = 0;
+                    balance = 0;
                     HasilTotal.setText("0");
                 }
             });
         }
     }
-
-    private int performSubtraction(String value) {
-        int intValue = Integer.parseInt(value);
-        return dummy - intValue;
-    }
-
-    private ActivityResultLauncher<Intent> scanBarcodeLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == RESULT_OK) {
-                    Intent data = result.getData();
-                    if (data != null && data.hasExtra("intentData")) {
-                        String intentData = data.getStringExtra("intentData");
-                        resultText.setText(intentData);
-
-                        if (isPrice(intentData)) {
-                            int remainingBalance = performSubtraction(intentData);
-                            HasilTotal.setText(String.valueOf(remainingBalance));
-                            navigateToPayment(remainingBalance);
-                        } else if (isPhoneNumber(intentData)) {
-                            navigateToTransfer(intentData);
-                        } else {
-                            // Handle invalid QR code
-                            resultText.setText("Invalid QR Code");
-                        }
-                    }
-                }
-            });
 
     private boolean isPrice(String str) {
         return str.matches("[1-9]\\d*"); // Memeriksa apakah string adalah angka yang tidak dimulai dengan 0
