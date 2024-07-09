@@ -1,6 +1,5 @@
 package com.example.pinkiewallet.backend
 
-import PinViewModel
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -15,6 +14,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.pinkiewallet.R
+import com.example.pinkiewallet.viewmodel.PinViewModel
+import com.example.pinkiewallet.viewmodel.TransferViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.security.MessageDigest
 
@@ -22,18 +23,24 @@ class PinReqActivity : AppCompatActivity() {
 
     private lateinit var pinInput: EditText
     private lateinit var fab: FloatingActionButton
-    private var jumlahHarga: Int = 0
 
     private val pinViewModel: PinViewModel by viewModels()
+    private val transferViewModel: TransferViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.pin_req)
 
-        jumlahHarga = intent.getIntExtra("jumlah_harga", 0)
+        val caller = intent.getStringExtra("caller")
+        val jumlahHarga = intent.getStringExtra("jumlah_harga")?.toInt() ?: 0
+        val nomorHp = intent.getStringExtra("nomorHp") // Terima sebagai String
 
         pinInput = findViewById(R.id.pin_input)
         fab = findViewById(R.id.fab)
+
+        // Log untuk memastikan nomor telepon diterima dengan benar
+        Log.d("PinReqActivity", "Nomor HP: $nomorHp")
+        Log.d("PinReqActivity", "Jumlah Harga: $jumlahHarga")
 
         pinInput.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
@@ -64,22 +71,42 @@ class PinReqActivity : AppCompatActivity() {
 
         pinViewModel.pinVerificationResult.observe(this, Observer { isVerified ->
             if (isVerified) {
-                Toast.makeText(this, "PIN verified successfully", Toast.LENGTH_SHORT).show()
-                pinViewModel.updateBalance(jumlahHarga)
+                Toast.makeText(this, "PIN berhasil diverifikasi", Toast.LENGTH_SHORT).show()
+
+                if (caller == "TransferActivity") {
+                    transferViewModel.checkRecipientPhoneAndTransfer(nomorHp ?: "", jumlahHarga, applicationContext)
+                } else if (caller == "QrMain") {
+                    pinViewModel.updateBalance(jumlahHarga,applicationContext)
+                }
             } else {
-                Toast.makeText(this, "Incorrect PIN", Toast.LENGTH_SHORT).show()
-                showKeyboard(pinInput)
+                Toast.makeText(this, "PIN salah", Toast.LENGTH_SHORT).show()
             }
         })
 
-        pinViewModel.balanceUpdateResult.observe(this, Observer { isSuccess ->
-            if (isSuccess) {
-                Toast.makeText(this, "Balance updated successfully", Toast.LENGTH_SHORT).show()
-                openPaymentActivity(jumlahHarga)
+        transferViewModel.transferResult.observe(this, Observer { transferSuccessful ->
+            if (transferSuccessful) {
+                navigateToPayment(jumlahHarga,"Transfer")
             } else {
-                Toast.makeText(this, "Failed to update balance", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Transfer gagal", Toast.LENGTH_SHORT).show()
             }
         })
+
+        pinViewModel.balanceUpdateResult.observe(this, Observer { balanceUpdateSuccessful ->
+            if (balanceUpdateSuccessful) {
+                navigateToPayment(jumlahHarga,"Bayar")
+            } else {
+                Toast.makeText(this, "Update saldo gagal", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun navigateToPayment(jumlahHarga: Int, origin: String) {
+        Toast.makeText(this, "Transfer berhasil - Ke Payment", Toast.LENGTH_SHORT).show()
+        val intent = Intent(this, Payment::class.java)
+        intent.putExtra("jumlah_harga", jumlahHarga)
+        intent.putExtra("origin", origin) // Menambahkan asal transaksi ke intent
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
     }
 
     private fun updatePinCircles(pin: CharSequence?) {
@@ -114,12 +141,5 @@ class PinReqActivity : AppCompatActivity() {
         view.post {
             imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
         }
-    }
-
-    private fun openPaymentActivity(jumlahHarga: Int) {
-        val paymentIntent = Intent(this, Payment::class.java)
-        paymentIntent.putExtra("jumlah_harga", jumlahHarga)
-        startActivity(paymentIntent)
-        finish()
     }
 }

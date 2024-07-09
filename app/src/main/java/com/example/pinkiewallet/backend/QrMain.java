@@ -57,7 +57,7 @@ public class QrMain extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         if (balance >= jumlahHarga) {
-                            navigateToPayment(jumlahHarga);
+                            navigateToPayment(String.valueOf(jumlahHarga));
                         } else {
                             Toast.makeText(QrMain.this, "Insufficient balance", Toast.LENGTH_SHORT).show();
                         }
@@ -115,11 +115,13 @@ public class QrMain extends AppCompatActivity {
         return str.matches("0\\d{9,12}"); // Memeriksa apakah string adalah nomor telepon yang dimulai dengan 0 dan memiliki panjang antara 10 hingga 13 digit
     }
 
-    private void navigateToPayment(int amount) {
+    private void navigateToPayment(String amount) {
         Intent intent = new Intent(QrMain.this, PinReqActivity.class);
         intent.putExtra("jumlah_harga", amount);
+        intent.putExtra("caller", "QrMain");  // Corrected Intent.putExtra
         startActivity(intent);
     }
+
 
     private void navigateToTransfer(String phoneNumber) {
         Intent intent = new Intent(QrMain.this, TransferActivity.class);

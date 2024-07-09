@@ -1,13 +1,17 @@
 package com.example.pinkiewallet.backend
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.example.pinkiewallet.R
+import com.example.pinkiewallet.view.activity.MainActivity
+import com.example.pinkiewallet.viewmodel.TransferViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -23,10 +27,12 @@ class TransferActivity : AppCompatActivity() {
 
     private lateinit var mAuth: FirebaseAuth
     private lateinit var database: DatabaseReference
+    private val transferViewModel: TransferViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_transfer)
+
 
         etRecipientPhone = findViewById(R.id.etRecipientPhone)
         etAmount = findViewById(R.id.etAmount)
@@ -48,68 +54,30 @@ class TransferActivity : AppCompatActivity() {
             if (recipientPhone.isEmpty() || amountStr.isEmpty()) {
                 Toast.makeText(applicationContext, "Semua kolom harus diisi", Toast.LENGTH_SHORT).show()
             } else {
-                val amount = amountStr.toInt()
-                transferMoney(recipientPhone, amount)
+                val amount = amountStr
+                val nomor = recipientPhone
+                initiatePinRequest(nomor, amount)
             }
         }
-    }
 
-    private fun transferMoney(recipientPhone: String, amount: Int) {
-        val senderId = mAuth.currentUser?.uid ?: return
-
-        database.child("users").child(senderId).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    val senderBalance = dataSnapshot.child("balance").getValue(Int::class.java)
-                    if (senderBalance != null) {
-                        if (senderBalance >= amount) {
-                            val recipientRef = database.child("users")
-                            recipientRef.orderByChild("phone_number").equalTo(recipientPhone).addListenerForSingleValueEvent(object : ValueEventListener {
-                                override fun onDataChange(recipientSnapshot: DataSnapshot) {
-                                    if (recipientSnapshot.exists()) {
-                                        val recipientId = recipientSnapshot.children.iterator().next().key
-                                        val recipientBalance = recipientId?.let {
-                                            recipientSnapshot.child(it).child("balance").getValue(Int::class.java)
-                                        }
-                                        if (recipientBalance != null) {
-                                            // Update sender and recipient balances
-                                            database.child("users").child(senderId).child("balance").setValue(senderBalance - amount)
-                                            database.child("users").child(recipientId).child("balance").setValue(recipientBalance + amount)
-
-                                            // Save transaction record
-                                            val transactionRef = database.child("transactions").push()
-                                            transactionRef.child("from").setValue(senderId)
-                                            transactionRef.child("to").setValue(recipientId)
-                                            transactionRef.child("amount").setValue(amount)
-                                            transactionRef.child("timestamp").setValue(ServerValue.TIMESTAMP)
-
-                                            Toast.makeText(applicationContext, "Transfer berhasil", Toast.LENGTH_SHORT).show()
-                                        } else {
-                                            Toast.makeText(applicationContext, "Saldo penerima tidak ditemukan", Toast.LENGTH_SHORT).show()
-                                        }
-                                    } else {
-                                        Toast.makeText(applicationContext, "Nomor penerima tidak ditemukan", Toast.LENGTH_SHORT).show()
-                                    }
-                                }
-
-                                override fun onCancelled(databaseError: DatabaseError) {
-                                    Log.e("FirebaseDB", "Gagal mencari nomor penerima", databaseError.toException())
-                                }
-                            })
-                        } else {
-                            Toast.makeText(applicationContext, "Saldo tidak cukup", Toast.LENGTH_SHORT).show()
-                        }
-                    } else {
-                        Toast.makeText(applicationContext, "Saldo pengirim tidak ditemukan", Toast.LENGTH_SHORT).show()
-                    }
-                } else {
-                    Toast.makeText(applicationContext, "Pengirim tidak ditemukan", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.e("FirebaseDB", "Gagal mencari saldo pengirim", databaseError.toException())
+        transferViewModel.transferResult.observe(this, Observer { transferSuccessful ->
+            if (transferSuccessful) {
+                Toast.makeText(this, "Transfer berhasil - Ke Payment", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, Payment::class.java)
+                intent.putExtra("jumlah_harga", etAmount.text.toString())
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "Transfer gagal", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    private fun initiatePinRequest(nomorHP: String, jumlahHarga: String) {
+        val pinReqIntent = Intent(this, PinReqActivity::class.java)
+        pinReqIntent.putExtra("caller", "TransferActivity")
+        pinReqIntent.putExtra("jumlah_harga", jumlahHarga)
+        pinReqIntent.putExtra("nomorHp", nomorHP) // Pastikan dikirim sebagai String
+        startActivity(pinReqIntent)
     }
 }
