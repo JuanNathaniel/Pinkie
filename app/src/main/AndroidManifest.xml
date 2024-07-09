@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
     <application
         android:allowBackup="true"
@@ -50,6 +51,7 @@
         <activity android:name=".backend.Payment" />
         <activity android:name=".backend.QrMain" />
         <activity android:name=".backend.ScannedBarcodeActivity" />
+        <activity android:name=".view.activity.ContactActivity" />
         <!-- <activity android:name=".DaftarActivity" /> -->
         <!-- <activity android:name=".TransferActivity" /> -->
         <!-- <activity android:name=".CreateQR" /> -->

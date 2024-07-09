@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.pinkiewallet"
-        minSdk = 24
+        minSdk = 28  // Meningkatkan minSdkVersion menjadi 28
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -60,6 +60,7 @@ dependencies {
 
     // Glide for image loading
     implementation("com.github.bumptech.glide:glide:4.12.0")
+    implementation("com.android.car.ui:car-ui-lib:2.6.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
 
     // Circle Image View

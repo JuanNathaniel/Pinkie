@@ -21,6 +21,8 @@ import com.example.pinkiewallet.view.activity.MainActivity;
 
 public class Payment extends AppCompatActivity {
     EditText HasilTotal;
+    EditText KataAsal;
+
     private Button openButton;
 
     private FirebaseAuth mAuth;
@@ -34,10 +36,15 @@ public class Payment extends AppCompatActivity {
         // Terima nilai jumlah_harga dari intent
         Intent intent = getIntent();
         int jumlahHarga = intent.getIntExtra("jumlah_harga", 0);
+        String origin = intent.getStringExtra("origin");
+        String asal = origin;
 
         // Set nilai jumlah_harga ke dalam EditText HasilTotal
         HasilTotal = findViewById(R.id.HasilTotal);
         HasilTotal.setText(String.valueOf(jumlahHarga));
+
+        KataAsal = findViewById(R.id.Asal);
+        KataAsal.setText(asal);
 
         openButton = findViewById(R.id.backMain);
 
@@ -50,7 +57,6 @@ public class Payment extends AppCompatActivity {
                 Intent intent = new Intent(Payment.this, MainActivity.class);
                 startActivity(intent);
                 finish(); // Menutup activity Payment
-
             }
         });
     }

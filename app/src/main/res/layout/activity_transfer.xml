@@ -9,18 +9,27 @@
         android:id="@+id/etRecipientPhone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nomor Telepon Penerima" />
+        android:hint="Nomor Telepon Penerima"
+        android:minHeight="48dp" />
 
     <EditText
         android:id="@+id/etAmount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Jumlah Transfer" />
+        android:hint="Jumlah Transfer"
+        android:minHeight="48dp"
+        />
 
     <Button
         android:id="@+id/btnTransfer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Transfer" />
+
+    <Button
+        android:id="@+id/btnContact"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Contact" />
 
 </LinearLayout>
