@@ -62,10 +62,12 @@ class TransferActivity : AppCompatActivity() {
                 initiatePinRequest(nomor, amount)
             }
         }
+
         btnContact.setOnClickListener {
             val intent = Intent(this, ContactActivity::class.java)
             startActivity(intent)
         }
+
         transferViewModel.transferResult.observe(this, Observer { transferSuccessful ->
             if (transferSuccessful) {
                 Toast.makeText(this, "Transfer berhasil - Ke Payment", Toast.LENGTH_SHORT).show()
