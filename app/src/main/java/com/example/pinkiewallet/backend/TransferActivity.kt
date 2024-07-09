@@ -2,19 +2,24 @@ package com.example.pinkiewallet.backend
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.Observer
 import com.example.pinkiewallet.R
 import com.example.pinkiewallet.view.activity.ContactActivity
+import com.example.pinkiewallet.view.activity.MainActivity
 import com.example.pinkiewallet.viewmodel.TransferViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ServerValue
+import com.google.firebase.database.ValueEventListener
 
 class TransferActivity : AppCompatActivity() {
     private lateinit var etRecipientPhone: EditText
@@ -57,12 +62,10 @@ class TransferActivity : AppCompatActivity() {
                 initiatePinRequest(nomor, amount)
             }
         }
-
         btnContact.setOnClickListener {
             val intent = Intent(this, ContactActivity::class.java)
             startActivity(intent)
         }
-
         transferViewModel.transferResult.observe(this, Observer { transferSuccessful ->
             if (transferSuccessful) {
                 Toast.makeText(this, "Transfer berhasil - Ke Payment", Toast.LENGTH_SHORT).show()

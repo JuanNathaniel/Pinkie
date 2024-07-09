@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.pinkiewallet.R
+import com.google.firebase.database.*
 
 class ContactActivity : AppCompatActivity() {
 
@@ -24,6 +25,7 @@ class ContactActivity : AppCompatActivity() {
     private lateinit var contacts: ArrayList<String>
     private lateinit var listView: ListView
     private lateinit var searchView: SearchView
+    private lateinit var database: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +33,7 @@ class ContactActivity : AppCompatActivity() {
 
         listView = findViewById(R.id.contact_list)
         searchView = findViewById(R.id.search_view)
+        database = FirebaseDatabase.getInstance().reference.child("users") // menyesuaikan dengan struktur data Anda di Firebase
 
         // Cek dan minta izin jika belum diberikan
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)
@@ -89,6 +92,7 @@ class ContactActivity : AppCompatActivity() {
 
         cursor?.let {
             if (it.count > 0) {
+                val tempContacts = ArrayList<Pair<String, String>>()
                 while (it.moveToNext()) {
                     val idIndex = it.getColumnIndex(ContactsContract.Contacts._ID)
                     val nameIndex = it.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
@@ -112,7 +116,7 @@ class ContactActivity : AppCompatActivity() {
                                 if (phoneNumberIndex >= 0) {
                                     while (pc.moveToNext()) {
                                         val phoneNumber = pc.getString(phoneNumberIndex)
-                                        contacts.add("$name: $phoneNumber")
+                                        tempContacts.add(Pair(name, phoneNumber))
                                     }
                                 }
                                 pc.close()
@@ -121,7 +125,30 @@ class ContactActivity : AppCompatActivity() {
                     }
                 }
                 it.close()
+                checkContactsInFirebase(tempContacts)
             }
+        }
+    }
+
+    private fun checkContactsInFirebase(tempContacts: ArrayList<Pair<String, String>>) {
+        for (contact in tempContacts) {
+            val name = contact.first
+            val phoneNumber = contact.second
+            database.orderByChild("phoneNumber").equalTo(phoneNumber)
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists()) {
+                            contacts.add("$name: $phoneNumber (Connected)")
+                        } else {
+                            contacts.add("$name: $phoneNumber")
+                        }
+                        adapter.notifyDataSetChanged()
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        Toast.makeText(this@ContactActivity, "Error checking contact in Firebase", Toast.LENGTH_SHORT).show()
+                    }
+                })
         }
 
         adapter = ArrayAdapter(this, R.layout.list_contact, contacts)
