@@ -112,11 +112,11 @@ class ContactActivity : AppCompatActivity() {
                             )
 
                             phoneCursor?.let { pc ->
-                                val phoneNumberIndex = pc.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
-                                if (phoneNumberIndex >= 0) {
+                                val phone_number = pc.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
+                                if (phone_number >= 0) {
                                     while (pc.moveToNext()) {
-                                        val phoneNumber = pc.getString(phoneNumberIndex)
-                                        tempContacts.add(Pair(name, phoneNumber))
+                                        val phone_number = pc.getString(phone_number)
+                                        tempContacts.add(Pair(name, phone_number))
                                     }
                                 }
                                 pc.close()
@@ -131,22 +131,34 @@ class ContactActivity : AppCompatActivity() {
     }
 
     private fun checkContactsInFirebase(tempContacts: ArrayList<Pair<String, String>>) {
+        val totalContacts = tempContacts.size
+        var processedContacts = 0
+
         for (contact in tempContacts) {
             val name = contact.first
             val phoneNumber = contact.second
-            database.orderByChild("phoneNumber").equalTo(phoneNumber)
+            database.orderByChild("phone_number").equalTo(phoneNumber)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         if (snapshot.exists()) {
                             contacts.add("$name: $phoneNumber (Connected)")
                         } else {
-                            contacts.add("$name: $phoneNumber")
+                            contacts.add("$name: $phoneNumber ")
                         }
-                        adapter.notifyDataSetChanged()
+                        processedContacts++
+                        if (processedContacts == totalContacts) {
+                            // Update adapter after all contacts are processed
+                            adapter.notifyDataSetChanged()
+                        }
                     }
 
                     override fun onCancelled(error: DatabaseError) {
                         Toast.makeText(this@ContactActivity, "Error checking contact in Firebase", Toast.LENGTH_SHORT).show()
+                        processedContacts++
+                        if (processedContacts == totalContacts) {
+                            // Update adapter after all contacts are processed
+                            adapter.notifyDataSetChanged()
+                        }
                     }
                 })
         }
@@ -154,4 +166,5 @@ class ContactActivity : AppCompatActivity() {
         adapter = ArrayAdapter(this, R.layout.list_contact, contacts)
         listView.adapter = adapter
     }
+
 }

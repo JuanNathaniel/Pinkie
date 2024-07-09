@@ -9,24 +9,22 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.pinkiewallet.R
 import com.example.pinkiewallet.view.activity.ContactActivity
-import com.example.pinkiewallet.view.activity.MainActivity
 import com.example.pinkiewallet.viewmodel.TransferViewModel
+import com.example.pinkiewallet.model.Transaction
+import com.example.pinkiewallet.view.adapter.TransactionAdapter
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ServerValue
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 
 class TransferActivity : AppCompatActivity() {
     private lateinit var etRecipientPhone: EditText
     private lateinit var etAmount: EditText
     private lateinit var btnTransfer: Button
     private lateinit var btnContact: Button
-
+    private lateinit var rvTransaction: RecyclerView
     private lateinit var mAuth: FirebaseAuth
     private lateinit var database: DatabaseReference
     private val transferViewModel: TransferViewModel by viewModels()
@@ -35,14 +33,16 @@ class TransferActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_transfer)
 
-
         etRecipientPhone = findViewById(R.id.etRecipientPhone)
         etAmount = findViewById(R.id.etAmount)
         btnTransfer = findViewById(R.id.btnTransfer)
         btnContact = findViewById(R.id.btnContact)
+        rvTransaction = findViewById(R.id.rvTransaction)
 
         mAuth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().reference
+
+        rvTransaction.layoutManager = LinearLayoutManager(this)
 
         // Ambil nomor telepon dari intent dan set ke etRecipientPhone
         val phoneNumber = intent.getStringExtra("nomor_telepon")
@@ -79,13 +79,45 @@ class TransferActivity : AppCompatActivity() {
                 Toast.makeText(this, "Transfer gagal", Toast.LENGTH_SHORT).show()
             }
         })
+
+        // Fetch transaction history
+        fetchTransactions()
     }
+
+    private fun fetchTransactions() {
+        val userId = mAuth.currentUser?.uid
+        if (userId == null) {
+            Log.e("TransferActivity", "User ID is null")
+            return
+        }
+
+        val transactionsRef = database.child("transactions")
+        transactionsRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val transactions = mutableListOf<Transaction>()
+                for (snapshot in dataSnapshot.children) {
+                    val transaction = snapshot.getValue(Transaction::class.java)
+                    if (transaction != null) {
+                        if (transaction.from == userId || transaction.to == userId) {
+                            transactions.add(transaction)
+                        }
+                    }
+                }
+                rvTransaction.adapter = TransactionAdapter(transactions)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e("TransferActivity", "Failed to load transactions", databaseError.toException())
+            }
+        })
+    }
+
 
     private fun initiatePinRequest(nomorHP: String, jumlahHarga: String) {
         val pinReqIntent = Intent(this, PinReqActivity::class.java)
         pinReqIntent.putExtra("caller", "TransferActivity")
         pinReqIntent.putExtra("jumlah_harga", jumlahHarga)
-        pinReqIntent.putExtra("nomorHp", nomorHP) // Pastikan dikirim sebagai String
+        pinReqIntent.putExtra("nomorHp", nomorHP)
         startActivity(pinReqIntent)
     }
 }
