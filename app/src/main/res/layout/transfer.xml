@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/transferFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/pink">
+
+    <ImageButton
+        android:id="@+id/backward_button"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/ic_arrow_backward"
+        android:scaleType="fitCenter"
+        android:background="@color/pink"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="25dp"/>
+
+    <!-- Header -->
+    <TextView
+        android:id="@+id/tvTransferTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text= "Transfer Ke"
+        android:textSize="25sp"
+        android:textColor="@color/white"
+        android:layout_toRightOf="@id/backward_button"
+        android:layout_marginTop="22dp"
+        android:layout_marginLeft="20dp"/>
+
+
+    <View
+        android:id="@+id/container1"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginTop="80dp"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/round_gradient" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="330dp"
+        android:layout_height="70dp"
+        android:layout_below="@id/tvTransferTitle"
+        android:layout_marginTop="35dp"
+        android:layout_centerHorizontal="true"
+        android:hint="Nomor Telepon Penerima"
+        android:textColorHint="@color/white"
+        app:boxBackgroundMode="filled">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/nomorPenerima"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="phone"
+            android:background="@drawable/round_solid"
+            android:textColor="@color/white" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/ic"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:src="@drawable/profile"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="45dp"
+        android:visibility="invisible"
+        android:layout_below="@id/backward_button" />
+
+    <ImageView
+        android:id="@+id/ic_pinki"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/ic_pinkie"
+        android:layout_below="@+id/tvTransferTitle"
+        android:layout_toRightOf="@id/ic"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="45dp"
+        android:visibility="invisible"/>
+
+    <TextView
+        android:id="@+id/tvUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Venny (Penik)"
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/white"
+        android:layout_below="@id/tvTransferTitle"
+        android:layout_marginTop="45dp"
+        android:layout_toRightOf="@+id/ic_pinki"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:visibility="invisible"/>
+
+    <TextView
+        android:id="@+id/tvUserPhone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="6283189060710"
+        android:textSize="14sp"
+        android:layout_marginTop="2dp"
+        android:layout_marginLeft="12dp"
+        android:textColor="@color/bone"
+        android:layout_below="@+id/tvUserName"
+        android:layout_toRightOf="@id/ic"
+        android:visibility="invisible"/>
+
+
+    <View
+        android:id="@+id/container2"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:layout_marginTop="15dp"
+        android:layout_below="@id/container1"
+        android:background="@drawable/round_gradient"/>
+
+        <!-- Transfer Amount -->
+    <TextView
+        android:id="@+id/tvTransferAmountTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Jumlah Transfer"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="175dp"
+        android:paddingTop="16dp"/>
+
+    <EditText
+        android:id="@+id/etTransferAmount"
+        android:layout_width="330dp"
+        android:layout_height="60dp"
+        android:hint="0"
+        android:inputType="numberDecimal"
+        android:padding="8dp"
+        android:layout_below="@id/tvTransferAmountTitle"
+        android:background="@drawable/round_solid"
+        android:textSize="28sp"
+        android:layout_marginTop="17dp"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/bone"/>
+
+    <TextView
+        android:id="@+id/saldodapatditransfer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Saldo yang Dapat Ditransfer: Rp24.619"
+        android:textSize="16sp"
+        android:layout_below="@id/etTransferAmount"
+        android:textColor="@color/white"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="5dp"
+        android:paddingTop="16dp"/>
+
+<!--    <TextView-->
+<!--        android:id="@+id/tvAvailableBalance"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Saldo yang Dapat Ditransfer: Rp24.619"-->
+<!--        android:textSize="14sp"-->
+<!--        android:textColor="@android:color/darker_gray"-->
+<!--        android:paddingTop="8dp"/>-->
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/round_solid" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Jumlah Pembayaran"
+        android:layout_alignParentBottom="true"
+        android:textColor="@color/grey"
+        android:layout_marginBottom="40dp"
+        android:layout_marginRight="15dp"
+        android:layout_toLeftOf="@+id/btnContinue"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/jumlahpembayaran"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rp0"
+        android:textColor="@color/bone"
+        android:layout_alignParentBottom="true"
+        android:textSize="20sp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_toLeftOf="@+id/btnContinue" />
+
+    <!-- Bottom Button -->
+    <Button
+        android:id="@+id/btnContinue"
+        android:layout_width="wrap_content"
+        android:layout_height="65dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="3dp"
+        android:backgroundTint="@android:color/holo_orange_light"
+        android:text="Lanjutkan"
+        android:textColor="@android:color/white" />
+</RelativeLayout>
