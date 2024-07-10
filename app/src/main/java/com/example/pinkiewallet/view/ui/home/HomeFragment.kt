@@ -9,11 +9,15 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.pinkiewallet.R
 import com.example.pinkiewallet.view.adapter.HorizontalAdapter
 import com.example.pinkiewallet.model.Item
 import com.example.pinkiewallet.backend.CreateQR
 import com.example.pinkiewallet.backend.TransferActivity
 import com.example.pinkiewallet.databinding.FragmentHomeBinding
+import com.example.pinkiewallet.view.fragment.Register2
+import com.example.pinkiewallet.view.fragment.Transfer
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
@@ -65,10 +69,11 @@ class HomeFragment : Fragment() {
         val itemList: MutableList<Item> = ArrayList()
 
         // Example items for Insight RecyclerView
-//        itemList.add(Item("Item 1", "https://www.ukulele.co.nz/wp-content/uploads/2020/11/Iklan-mcdonalds.jpg"))
-//        itemList.add(Item("Item 2", "https://kledo.com/blog/wp-content/uploads/2022/01/iklan-produk.jpg"))
-//        itemList.add(Item("Item 3", "https://cdn-image.hipwee.com/wp-content/uploads/2020/06/hipwee-floridina-01.jpg"))
-//        itemList.add(Item("Item 4", "https://lh5.googleusercontent.com/YOVjx5EeT8vtVEge-HV6TSWRe2wyxPsaWvtiWl6u9jrAIoEnEwfLHZX9NVNZlUYdpG3sqTwWgdljrkGyw5jTv3qAXhgVSdws2I6SChKFVWP2i7ABXiz4s60lTYXsFHWKOQUhrrdjTqP4g0RY-T_gDiU"))
+
+        itemList.add(Item("https://www.ukulele.co.nz/wp-content/uploads/2020/11/Iklan-mcdonalds.jpg"))
+        itemList.add(Item("https://kledo.com/blog/wp-content/uploads/2022/01/iklan-produk.jpg"))
+        itemList.add(Item("https://cdn-image.hipwee.com/wp-content/uploads/2020/06/hipwee-floridina-01.jpg"))
+        itemList.add(Item("https://lh5.googleusercontent.com/YOVjx5EeT8vtVEge-HV6TSWRe2wyxPsaWvtiWl6u9jrAIoEnEwfLHZX9NVNZlUYdpG3sqTwWgdljrkGyw5jTv3qAXhgVSdws2I6SChKFVWP2i7ABXiz4s60lTYXsFHWKOQUhrrdjTqP4g0RY-T_gDiU"))
 
         if (itemList.isEmpty()) {
             // Daftar item kosong, lakukan sesuatu di sini jika diperlukan
@@ -112,8 +117,17 @@ class HomeFragment : Fragment() {
 
         // Handle transfer button click
         binding.transferbt.setOnClickListener {
-            val intent = Intent(requireContext(), TransferActivity::class.java)
-            startActivity(intent)
+//            val intent = Intent(requireContext(), TransferActivity::class.java)
+//            startActivity(intent)
+
+            val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.nav_view)
+            bottomNavigationView.visibility = View.GONE
+
+            val transferFragment = Transfer()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, transferFragment)  //
+                .addToBackStack(null)
+                .commit()
         }
 
         // Handle withdraw button click

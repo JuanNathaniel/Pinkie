@@ -2,6 +2,9 @@ package com.example.pinkiewallet.view.activity
 
 import android.content.Intent
 import android.os.Bundle
+
+import android.view.View
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -12,10 +15,17 @@ import com.example.pinkiewallet.backend.QrMain
 import com.example.pinkiewallet.backend.ScannedBarcodeActivity
 import com.example.pinkiewallet.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.pinkiewallet.model.User
+import com.example.pinkiewallet.view.fragment.Transfer
+import com.example.pinkiewallet.viewmodel.FirebaseNotificationManager
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
+    private lateinit var firebaseNotificationManager: FirebaseNotificationManager
+    private lateinit var currentUser: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +37,6 @@ class MainActivity : AppCompatActivity() {
         val navView: BottomNavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
 
-        // Setup the AppBarConfiguration with the top-level destinations
         val appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.navigation_home, R.id.navigation_notifications // Exclude navigation_dashboard
@@ -47,6 +56,7 @@ class MainActivity : AppCompatActivity() {
                     navController.navigate(item.itemId)
                     true
                 }
+
             }
         }
     }
