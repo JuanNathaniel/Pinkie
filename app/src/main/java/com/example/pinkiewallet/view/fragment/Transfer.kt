@@ -38,9 +38,10 @@ class Transfer : Fragment(){
         val root: View = binding.root
 
         mAuth = FirebaseAuth.getInstance()
+//        database = FirebaseDatabase.getInstance()
         database = FirebaseDatabase.getInstance()
 //        usersRef = database.getReference("users")
-        usersRef = FirebaseDatabase.getInstance().reference
+        usersRef = database.getReference("users")
 
         return root
     }
