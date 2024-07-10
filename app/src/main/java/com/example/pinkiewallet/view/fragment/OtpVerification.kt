@@ -11,7 +11,9 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.pinkiewallet.R
 import com.example.pinkiewallet.databinding.OtpVerificationBinding
 import com.example.pinkiewallet.view.activity.MainActivity
@@ -68,6 +70,15 @@ class OtpVerification : Fragment() {
             })
         }
 
+        // Observe isNewUser LiveData to navigate accordingly
+        viewModel.isNewUser.observe(viewLifecycleOwner) { isNewUser ->
+            if (isNewUser) {
+                navigateToRegister1()
+            } else {
+                navigateToMainActivity()
+            }
+        }
+
         // Handle verify button click
         binding.btnVerify.setOnClickListener {
             val otp = "${etOtp1.text}${etOtp2.text}${etOtp3.text}${etOtp4.text}${etOtp5.text}${etOtp6.text}"
@@ -79,9 +90,8 @@ class OtpVerification : Fragment() {
                     otp = otp,
                     phoneNumber = requireArguments().getString("phoneNumber").toString(),
                     onSuccess = {
-                        // Handle successful verification, navigate or perform action
+                        // Handle successful verification, no need to navigate directly here
                         Toast.makeText(requireContext(), "Verifikasi Berhasil", Toast.LENGTH_SHORT).show()
-                        navigateToMainActivity()
                     },
                     onError = { message ->
                         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
@@ -124,6 +134,15 @@ class OtpVerification : Fragment() {
         startActivity(Intent(requireContext(), MainActivity::class.java))
         requireActivity().finish()
     }
+
+    private fun navigateToRegister1() {
+        val fragment = Register1()
+        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_container, fragment)
+        transaction.addToBackStack(null) // Menambahkan ke back stack jika diperlukan
+        transaction.commit()
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

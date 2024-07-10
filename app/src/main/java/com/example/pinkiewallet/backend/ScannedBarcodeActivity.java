@@ -2,7 +2,6 @@ package com.example.pinkiewallet.backend;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -34,6 +33,7 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanned_barcode);
         initViews();
+        initialiseDetectorsAndSources();
     }
 
     private void initViews() {
@@ -94,16 +94,41 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
                             intentData = barcodes.valueAt(0).displayValue;
                             txtBarcodeValue.setText(intentData);
 
-                            // Pass intentData back to QrMain
-                            Intent resultIntent = new Intent();
-                            resultIntent.putExtra("intentData", intentData);
-                            setResult(Activity.RESULT_OK, resultIntent);
-                            finish(); // Close the current activity and return to QrMain
+                            // Check the QR value and navigate to appropriate activity
+                            if (isPrice(intentData)) {
+                                navigateToQrMain(intentData);
+                            } else if (isPhoneNumber(intentData)) {
+                                navigateToTransfer(intentData);
+                            } else {
+                                txtBarcodeValue.setText("Invalid QR Code");
+                            }
                         }
                     });
                 }
             }
         });
+    }
+
+    private boolean isPrice(String str) {
+        return str.matches("[1-9]\\d*"); // Check if string is a number not starting with 0
+    }
+
+    private boolean isPhoneNumber(String str) {
+        return str.matches("0\\d{9,12}"); // Check if string is a phone number starting with 0 and 10-13 digits long
+    }
+
+    private void navigateToQrMain(String price) {
+        Intent intent = new Intent(ScannedBarcodeActivity.this, QrMain.class);
+        intent.putExtra("intentData", price);
+        startActivity(intent);
+        finish();
+    }
+
+    private void navigateToTransfer(String phoneNumber) {
+        Intent intent = new Intent(ScannedBarcodeActivity.this, TransferActivity.class);
+        intent.putExtra("nomor_telepon", phoneNumber);
+        startActivity(intent);
+        finish();
     }
 
     @Override

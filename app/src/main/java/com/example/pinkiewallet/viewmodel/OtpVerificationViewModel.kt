@@ -1,6 +1,8 @@
 package com.example.pinkiewallet.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthProvider
@@ -11,6 +13,11 @@ class OtpVerificationViewModel : ViewModel() {
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
     private val usersRef: DatabaseReference = database.getReference("users")
+
+    // LiveData to notify whether user is new or existing
+    private val _isNewUser = MutableLiveData<Boolean>()
+    val isNewUser: LiveData<Boolean>
+        get() = _isNewUser
 
     fun verifyOtp(
         verificationId: String,
@@ -47,6 +54,7 @@ class OtpVerificationViewModel : ViewModel() {
                             val userId = auth.currentUser?.uid ?: ""
                             if (userId.isNotEmpty()) {
                                 usersRef.child(userId).child("status").setValue("login")
+                                _isNewUser.value = false // Existing user
                                 onSuccess()
                             } else {
                                 onError("Failed to get user ID")
@@ -54,6 +62,8 @@ class OtpVerificationViewModel : ViewModel() {
                         }
                     }
                 } else {
+                    // User not found in database
+                    _isNewUser.value = true // New user
                     savePhoneNumberToDatabase(phoneNumber, onSuccess, onError)
                 }
             }
@@ -73,8 +83,10 @@ class OtpVerificationViewModel : ViewModel() {
         val userId = auth.currentUser?.uid ?: ""
         if (userId.isNotEmpty()) {
             usersRef.child(userId).apply {
+                // Example of setting additional fields
                 child("phone_number").setValue(phoneNumber)
                 child("balance").setValue(0)
+                child("point").setValue(0)
                 child("status").setValue("login")
                     .addOnSuccessListener {
                         onSuccess()

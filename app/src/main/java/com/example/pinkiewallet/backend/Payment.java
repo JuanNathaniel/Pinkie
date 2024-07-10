@@ -19,9 +19,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.example.pinkiewallet.view.activity.MainActivity;
 
-
 public class Payment extends AppCompatActivity {
     EditText HasilTotal;
+    EditText KataAsal;
+
     private Button openButton;
 
     private FirebaseAuth mAuth;
@@ -35,10 +36,15 @@ public class Payment extends AppCompatActivity {
         // Terima nilai jumlah_harga dari intent
         Intent intent = getIntent();
         int jumlahHarga = intent.getIntExtra("jumlah_harga", 0);
+        String origin = intent.getStringExtra("origin");
+        String asal = origin;
 
         // Set nilai jumlah_harga ke dalam EditText HasilTotal
         HasilTotal = findViewById(R.id.HasilTotal);
         HasilTotal.setText(String.valueOf(jumlahHarga));
+
+        KataAsal = findViewById(R.id.Asal);
+        KataAsal.setText(asal);
 
         openButton = findViewById(R.id.backMain);
 
@@ -48,40 +54,9 @@ public class Payment extends AppCompatActivity {
         openButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateBalance(jumlahHarga);
-            }
-        });
-    }
-
-    private void updateBalance(int jumlahHarga) {
-        String userId = mAuth.getCurrentUser().getUid();
-        DatabaseReference userRef = databaseReference.child(userId);
-
-        userRef.child("balance").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    int currentBalance = snapshot.getValue(Integer.class);
-                    int newBalance = currentBalance - jumlahHarga;
-
-                    userRef.child("balance").setValue(newBalance)
-                            .addOnCompleteListener(task -> {
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(Payment.this, "Balance updated successfully", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(Payment.this, MainActivity.class);
-                                    startActivity(intent);
-                                } else {
-                                    Toast.makeText(Payment.this, "Failed to update balance", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                } else {
-                    Toast.makeText(Payment.this, "Balance not found", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(Payment.this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(Payment.this, MainActivity.class);
+                startActivity(intent);
+                finish(); // Menutup activity Payment
             }
         });
     }
