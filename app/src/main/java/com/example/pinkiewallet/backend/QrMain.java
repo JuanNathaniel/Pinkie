@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pinkiewallet.R;
@@ -20,8 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class QrMain extends AppCompatActivity {
-    EditText resultText;
-    EditText HasilTotal;
+    TextView resultText;
     int balance; // Mengganti variabel dummy menjadi balance yang merepresentasikan saldo user
     private Button openButton;
 
@@ -34,7 +34,6 @@ public class QrMain extends AppCompatActivity {
         setContentView(R.layout.qr_main);
 
         resultText = findViewById(R.id.result_text);
-        HasilTotal = findViewById(R.id.HasilTotal);
         openButton = findViewById(R.id.btnConfirmBayar);
 
         mAuth = FirebaseAuth.getInstance();
@@ -46,12 +45,11 @@ public class QrMain extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("intentData")) {
             String intentData = intent.getStringExtra("intentData");
-            resultText.setText(intentData);
+            resultText.setText("Rp"+intentData);
 
             if (isPrice(intentData)) {
                 int jumlahHarga = Integer.parseInt(intentData);
-                HasilTotal.setText(String.valueOf(jumlahHarga));
-
+//
                 // Navigate to Payment after confirmation button clicked
                 openButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -88,11 +86,11 @@ public class QrMain extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {
                         balance = snapshot.getValue(Integer.class); // Mengambil nilai balance dari database
-                        HasilTotal.setText(String.valueOf(balance));
+//                        HasilTotal.setText(String.valueOf(balance));
                     } else {
                         // Handle the case where balance doesn't exist in the database
                         balance = 0;
-                        HasilTotal.setText("0");
+//                        HasilTotal.setText("0");
                     }
                 }
 
@@ -101,7 +99,7 @@ public class QrMain extends AppCompatActivity {
                     // Handle database error
                     error.toException().printStackTrace();
                     balance = 0;
-                    HasilTotal.setText("0");
+//                    HasilTotal.setText("0");
                 }
             });
         }

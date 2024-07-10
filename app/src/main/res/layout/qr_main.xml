@@ -1,69 +1,88 @@
-
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/pink"
     tools:context=".view.activity.MainActivity">
 
-    <!-- Include pin_req.xml -->
+    <ImageButton
+        android:id="@+id/backward_button"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/ic_arrow_backward"
+        android:scaleType="fitCenter"
+        android:background="@color/pink"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="25dp"/>
 
-
-    <EditText
-        android:id="@+id/Captresult_text"
-        android:layout_width="match_parent"
+    <!-- Header -->
+    <TextView
+        android:id="@+id/tvTransferTitle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="120dp"
-        android:editable="false"
-        android:hint="Harga yang akan dibayar"
-        android:inputType="none"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text= "Konfirmasi Transaksi"
+        android:textSize="25sp"
+        android:textColor="@color/white"
+        android:layout_toRightOf="@id/backward_button"
+        android:layout_marginTop="22dp"
+        android:layout_marginLeft="20dp"/>
 
-    <EditText
+    <View
+        android:id="@+id/gambar"
+        android:layout_width="wrap_content"
+        android:layout_height="230dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/wall"
+        android:layout_below="@+id/tvTransferTitle" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Punten A....\nMau Bayar"
+        android:layout_below="@id/tvTransferTitle"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="50dp" />
+
+    <TextView
+        android:id="@+id/jumlahtransfer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Jumlah Bayar"
+        android:layout_below="@id/gambar"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp" />
+
+    <TextView
         android:id="@+id/result_text"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:editable="false"
+        android:textSize="27sp"
+        android:textColor="@color/white"
+        android:layout_centerHorizontal="true"
         android:inputType="none"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Captresult_text" />
-
+        android:layout_below="@+id/jumlahtransfer" />
 
     <Button
         android:id="@+id/btnConfirmBayar"
-        android:layout_width="300dp"
+        android:layout_width="370dp"
         android:gravity="center"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:layout_marginTop="44dp"
-        android:text="COnfirmasi Bayar"
-        app:layout_constraintTop_toBottomOf="@+id/result_text"
-        tools:layout_editor_absoluteX="55dp" />
+        android:text="Konfirmasi Bayar"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:backgroundTint="@color/teal_200"/>
 
-    <EditText
-        android:id="@+id/HasilTotal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="132dp"
-        android:editable="false"
-        android:inputType="none"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/result_text" />
-
-    <Button
-        android:id="@+id/btnScanBarcode"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:text="QR Scanner"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/HasilTotal" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>
