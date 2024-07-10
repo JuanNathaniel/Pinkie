@@ -1,6 +1,7 @@
 package com.example.pinkiewallet.view.activity
 
 import android.os.Bundle
+import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -10,6 +11,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.pinkiewallet.R
 import com.example.pinkiewallet.databinding.ActivityMainBinding
 import com.example.pinkiewallet.model.User
+import com.example.pinkiewallet.view.fragment.Transfer
 import com.example.pinkiewallet.viewmodel.FirebaseNotificationManager
 import com.google.firebase.auth.FirebaseAuth
 
@@ -37,5 +39,14 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        supportFragmentManager.addOnBackStackChangedListener {
+            val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+            if (currentFragment is Transfer) {
+                navView.visibility = View.GONE
+            } else {
+                navView.visibility = View.VISIBLE
+            }
+        }
     }
 }

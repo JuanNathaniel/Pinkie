@@ -9,11 +9,15 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.pinkiewallet.R
 import com.example.pinkiewallet.view.adapter.HorizontalAdapter
 import com.example.pinkiewallet.model.Item
 import com.example.pinkiewallet.backend.CreateQR
 import com.example.pinkiewallet.backend.TransferActivity
 import com.example.pinkiewallet.databinding.FragmentHomeBinding
+import com.example.pinkiewallet.view.fragment.Register2
+import com.example.pinkiewallet.view.fragment.Transfer
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
@@ -112,8 +116,17 @@ class HomeFragment : Fragment() {
 
         // Handle transfer button click
         binding.transferbt.setOnClickListener {
-            val intent = Intent(requireContext(), TransferActivity::class.java)
-            startActivity(intent)
+//            val intent = Intent(requireContext(), TransferActivity::class.java)
+//            startActivity(intent)
+
+            val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.nav_view)
+            bottomNavigationView.visibility = View.GONE
+
+            val transferFragment = Transfer()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, transferFragment)  //
+                .addToBackStack(null)
+                .commit()
         }
 
         // Handle withdraw button click

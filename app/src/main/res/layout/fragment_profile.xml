@@ -91,14 +91,22 @@
             android:gravity="center" />
 
         <TextView
-            android:layout_width="380dp"
+            android:id="@+id/sponsortext"
+            android:layout_width="160dp"
             android:layout_height="wrap_content"
-            android:text="Pesan sponsor dari @LOGO"
+            android:text="Pesan sponsor dari"
             android:textSize="18dp"
             android:textColor="@color/white"
             android:textStyle="bold"
             android:layout_marginTop="680dp"
             android:layout_marginLeft="12dp" />
+
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/ic_pinkie"
+            android:layout_toRightOf="@id/sponsortext"
+            android:layout_marginTop="670dp" />
 
         <TextView
             android:layout_width="310dp"
