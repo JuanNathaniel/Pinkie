@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.pinkiewallet.R
+import com.example.pinkiewallet.model.User
 import com.google.firebase.database.*
 
 class ContactActivity : AppCompatActivity() {
@@ -137,13 +138,13 @@ class ContactActivity : AppCompatActivity() {
         for (contact in tempContacts) {
             val name = contact.first
             val phoneNumber = contact.second
-            database.orderByChild("phone_number").equalTo(phoneNumber)
+            database.orderByChild("phone_Number").equalTo(phoneNumber)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         if (snapshot.exists()) {
                             contacts.add("$name: $phoneNumber (Connected)")
                         } else {
-                            contacts.add("$name: $phoneNumber ")
+                            contacts.add("$name: $phoneNumber")
                         }
                         processedContacts++
                         if (processedContacts == totalContacts) {
@@ -166,5 +167,6 @@ class ContactActivity : AppCompatActivity() {
         adapter = ArrayAdapter(this, R.layout.list_contact, contacts)
         listView.adapter = adapter
     }
+
 
 }

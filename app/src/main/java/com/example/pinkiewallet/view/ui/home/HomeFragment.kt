@@ -14,6 +14,7 @@ import com.example.pinkiewallet.model.Item
 import com.example.pinkiewallet.backend.CreateQR
 import com.example.pinkiewallet.backend.TransferActivity
 import com.example.pinkiewallet.databinding.FragmentHomeBinding
+import com.example.pinkiewallet.view.activity.HistoryActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
@@ -123,7 +124,8 @@ class HomeFragment : Fragment() {
 
         // Handle history button click
         binding.historybt.setOnClickListener {
-            Toast.makeText(requireContext(), "This is History", Toast.LENGTH_SHORT).show()
+            val intent = Intent(requireContext(), HistoryActivity::class.java)
+            startActivity(intent)
         }
     }
 
