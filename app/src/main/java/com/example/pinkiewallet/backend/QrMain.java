@@ -47,6 +47,11 @@ public class QrMain extends AppCompatActivity {
 
         getBalanceFromDatabase();
 
+        // Menyembunyikan SupportActionBar
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
         // Get the scanned data from intent
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("intentData")) {
@@ -125,7 +130,6 @@ public class QrMain extends AppCompatActivity {
         intent.putExtra("caller", "QrMain");  // Corrected Intent.putExtra
         startActivity(intent);
     }
-
 
     private void navigateToTransfer(String phoneNumber) {
         Intent intent = new Intent(QrMain.this, TransferActivity.class);

@@ -1,52 +1,163 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+    android:background="@color/pink"
+    tools:context=".view.activity.MainActivity">
 
+    <!-- Header -->
+    <TextView
+        android:id="@+id/tvTransferTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text= "Berhasil Transaksi"
+        android:textSize="25sp"
+        android:textColor="@color/white"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"/>
 
-    <EditText
-        android:id="@+id/Asal"
-        android:layout_width="369dp"
-        android:layout_height="206dp"
-        android:textColor="@color/black"
-        android:textSize="28dp"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="16dp" />
+    <View
+        android:id="@+id/gambar"
+        android:layout_width="wrap_content"
+        android:layout_height="230dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/wall"
+        android:layout_below="@+id/tvTransferTitle" />
 
     <TextView
-        android:id="@+id/subtitle"
-        android:layout_width="369dp"
-        android:layout_height="206dp"
-        android:text=" Transaksi Berhasiil, kamu membayar sebesar"
-        android:textColor="@color/black"
-        android:textSize="28dp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="246dp" />
-
-    <EditText
-        android:id="@+id/HasilTotal"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:editable="false"
-        android:hint="Hasil Pengurangan Saldo :"
-        android:inputType="none"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/subtitle" />
+        android:text="Hehe..\nUdah Bayar nich"
+        android:layout_below="@id/tvTransferTitle"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="50dp" />
+
+    <TextView
+        android:id="@+id/berhasilmelakukan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Kamu Berhasil Melakukan"
+        android:layout_below="@id/gambar"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp" />
+
+    <TextView
+        android:id="@+id/Asal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:text="Test"
+        android:textSize="22dp"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/berhasilmelakukan"/>
+
+    <TextView
+        android:id="@+id/HasilTotal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint=""
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/Asal"
+        android:textColor="@color/black"
+        android:layout_marginTop="10dp"
+        android:textSize="24sp"
+        />
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/HasilTotal"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:visibility="visible"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp" />
+
+<!--    <TextView-->
+<!--        android:id="@+id/result_text"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="12dp"-->
+<!--        android:textSize="27sp"-->
+<!--        android:textColor="@color/white"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:inputType="none"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.0"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        android:layout_below="@+id/time" />-->
 
     <Button
         android:id="@+id/backMain"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
+        android:layout_width="370dp"
+        android:gravity="center"
+        android:layout_height="60dp"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="116dp"
         android:text="Back to Main"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/HasilTotal" />
+        android:layout_alignParentBottom="true" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</RelativeLayout>
+
+<!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:tools="http://schemas.android.com/tools"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    >-->
+
+
+<!--    <EditText-->
+<!--        android:id="@+id/Asal"-->
+<!--        android:layout_width="369dp"-->
+<!--        android:layout_height="206dp"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:textSize="28dp"-->
+<!--        tools:layout_editor_absoluteX="16dp"-->
+<!--        tools:layout_editor_absoluteY="16dp" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/subtitle"-->
+<!--        android:layout_width="369dp"-->
+<!--        android:layout_height="206dp"-->
+<!--        android:text=" Transaksi Berhasiil, kamu membayar sebesar"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:textSize="28dp"-->
+<!--        tools:layout_editor_absoluteX="0dp"-->
+<!--        tools:layout_editor_absoluteY="246dp" />-->
+
+<!--    <EditText-->
+<!--        android:id="@+id/HasilTotal"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:editable="false"-->
+<!--        android:hint="Hasil Pengurangan Saldo :"-->
+<!--        android:inputType="none"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.0"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/subtitle" />-->
+
+<!--    <Button-->
+<!--        android:id="@+id/backMain"-->
+<!--        android:layout_width="300dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="116dp"-->
+<!--        android:text="Back to Main"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.495"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/HasilTotal" />-->
+
+<!--</androidx.constraintlayout.widget.ConstraintLayout>-->
