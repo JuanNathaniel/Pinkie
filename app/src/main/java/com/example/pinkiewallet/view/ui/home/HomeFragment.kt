@@ -13,11 +13,11 @@ import com.example.pinkiewallet.R
 import com.example.pinkiewallet.view.adapter.HorizontalAdapter
 import com.example.pinkiewallet.model.Item
 import com.example.pinkiewallet.backend.CreateQR
+import com.example.pinkiewallet.backend.TransferActivity
 import com.example.pinkiewallet.databinding.FragmentHomeBinding
 import com.example.pinkiewallet.view.activity.ContactActivity
 import com.example.pinkiewallet.view.activity.HistoryActivity
 import com.example.pinkiewallet.view.fragment.Register2
-import com.example.pinkiewallet.view.fragment.Transfer
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -106,14 +106,17 @@ class HomeFragment : Fragment() {
         }
 
         binding.transferbt.setOnClickListener {
-            val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.nav_view)
-            bottomNavigationView.visibility = View.GONE
+            val intent = Intent(requireContext(), TransferActivity::class.java)
+            startActivity(intent)
 
-            val transferFragment = Transfer()
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, transferFragment)
-                .addToBackStack(null)
-                .commit()
+//            val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.nav_view)
+//            bottomNavigationView.visibility = View.GONE
+//            val transferFragment = TransferActivity()
+//
+//            requireActivity().supportFragmentManager.beginTransaction()
+//                .replace(R.id.fragment_container, transferFragment)
+//                .addToBackStack(null)
+//                .commit()
         }
 
         binding.withdrawbt.setOnClickListener {

@@ -14,7 +14,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.pinkiewallet.R
-import com.example.pinkiewallet.view.fragment.Transfer
 import com.example.pinkiewallet.viewmodel.PinViewModel
 import com.example.pinkiewallet.viewmodel.TransferViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -117,15 +116,19 @@ class PinReqActivity : AppCompatActivity() {
     }
 
     private fun navigateToTransfer() {
-        val transferFragment = Transfer()
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, transferFragment)
-            .addToBackStack(null)
-            .commit()
+        val intent = Intent(this@PinReqActivity, TransferActivity::class.java)
+        startActivity(intent)
+        finish()
 
-        // Pastikan BottomNavigationView disembunyikan
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.nav_view)
-        bottomNavigationView.visibility = View.GONE
+//        val transferFragment = TransferActivity()
+//        supportFragmentManager.beginTransaction()
+//            .replace(R.id.fragment_container, transferFragment)
+//            .addToBackStack(null)
+//            .commit()
+//
+//        // Pastikan BottomNavigationView disembunyikan
+//        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.nav_view)
+//        bottomNavigationView.visibility = View.GONE
     }
 
     private fun updatePinCircles(pin: CharSequence?) {
