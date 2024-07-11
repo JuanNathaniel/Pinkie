@@ -26,6 +26,7 @@ class ContactActivity : AppCompatActivity() {
 
     private lateinit var adapter: ArrayAdapter<String>
     private lateinit var contacts: ArrayList<String>
+    private lateinit var filteredContacts: ArrayList<String>
     private lateinit var listView: ListView
     private lateinit var searchView: SearchView
     private lateinit var database: DatabaseReference
@@ -58,14 +59,14 @@ class ContactActivity : AppCompatActivity() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                adapter.filter.filter(newText)
+                filterContacts(newText)
                 return false
             }
         })
 
         // Setup ListView click listener
         listView.setOnItemClickListener { parent, view, position, id ->
-            val selectedContact = contacts[position]
+            val selectedContact = filteredContacts[position]
             Log.d("ContactActivity", "Contact clicked: $selectedContact") // Log for debugging
             if (selectedContact.contains("(Connected)")) {
                 val phoneNumber = selectedContact.split(":")[1].split(" ")[1]
@@ -75,8 +76,6 @@ class ContactActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
-
-
     }
 
     override fun onRequestPermissionsResult(
@@ -166,6 +165,9 @@ class ContactActivity : AppCompatActivity() {
                         processedContacts++
                         if (processedContacts == totalContacts) {
                             // Update adapter after all contacts are processed
+                            filteredContacts = ArrayList(contacts)
+                            adapter = ArrayAdapter(this@ContactActivity, R.layout.list_contact, filteredContacts)
+                            listView.adapter = adapter
                             adapter.notifyDataSetChanged()
                         }
                     }
@@ -175,13 +177,28 @@ class ContactActivity : AppCompatActivity() {
                         processedContacts++
                         if (processedContacts == totalContacts) {
                             // Update adapter after all contacts are processed
+                            filteredContacts = ArrayList(contacts)
+                            adapter = ArrayAdapter(this@ContactActivity, R.layout.list_contact, filteredContacts)
+                            listView.adapter = adapter
                             adapter.notifyDataSetChanged()
                         }
                     }
                 })
         }
+    }
 
-        adapter = ArrayAdapter(this, R.layout.list_contact, contacts)
-        listView.adapter = adapter
+    private fun filterContacts(query: String?) {
+        filteredContacts.clear()
+        if (query.isNullOrEmpty()) {
+            filteredContacts.addAll(contacts)
+        } else {
+            val lowerCaseQuery = query.lowercase()
+            filteredContacts.addAll(
+                contacts.filter {
+                    it.lowercase().contains(lowerCaseQuery)
+                }
+            )
+        }
+        adapter.notifyDataSetChanged()
     }
 }
