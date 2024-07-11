@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -129,6 +132,17 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
         intent.putExtra("nomor_telepon", phoneNumber);
         startActivity(intent);
         finish();
+//        Bundle bundle = new Bundle();
+//        bundle.putString("nomor_telepon", phoneNumber);
+//
+//        Transfer transferFragment = new Transfer();
+//        transferFragment.setArguments(bundle);
+//
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        fragmentTransaction.replace(R.id.fragment_container_main, transferFragment);
+//        fragmentTransaction.addToBackStack(null);
+//        fragmentTransaction.commit();
     }
 
     @Override

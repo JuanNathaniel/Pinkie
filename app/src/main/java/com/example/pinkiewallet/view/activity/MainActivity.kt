@@ -15,7 +15,7 @@ import com.example.pinkiewallet.backend.QrMain
 import com.example.pinkiewallet.backend.ScannedBarcodeActivity
 import com.example.pinkiewallet.databinding.ActivityMainBinding
 import com.example.pinkiewallet.model.User
-import com.example.pinkiewallet.view.fragment.Transfer
+//import com.example.pinkiewallet.view.fragment.Transfer
 import com.example.pinkiewallet.viewmodel.FirebaseNotificationManager
 import com.google.firebase.auth.FirebaseAuth
 
@@ -58,13 +58,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        supportFragmentManager.addOnBackStackChangedListener {
-            val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
-            if (currentFragment is Transfer) {
-                navView.visibility = View.GONE
-            } else {
-                navView.visibility = View.VISIBLE
-            }
-        }
+//        supportFragmentManager.addOnBackStackChangedListener {
+//            val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+//            if (currentFragment is Transfer) {
+//                navView.visibility = View.GONE
+//            } else {
+//                navView.visibility = View.VISIBLE
+//            }
+//        }
     }
 }
