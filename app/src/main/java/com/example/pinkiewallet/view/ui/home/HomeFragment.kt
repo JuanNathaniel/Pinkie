@@ -14,6 +14,8 @@ import com.example.pinkiewallet.view.adapter.HorizontalAdapter
 import com.example.pinkiewallet.model.Item
 import com.example.pinkiewallet.backend.CreateQR
 import com.example.pinkiewallet.databinding.FragmentHomeBinding
+import com.example.pinkiewallet.view.activity.ContactActivity
+import com.example.pinkiewallet.view.activity.HistoryActivity
 import com.example.pinkiewallet.view.fragment.Register2
 import com.example.pinkiewallet.view.fragment.Transfer
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -115,11 +117,13 @@ class HomeFragment : Fragment() {
         }
 
         binding.withdrawbt.setOnClickListener {
-            Toast.makeText(requireContext(), "Upcoming Feature", Toast.LENGTH_SHORT).show()
+            val intent = Intent(requireContext(), ContactActivity::class.java)
+            startActivity(intent)
         }
 
         binding.historybt.setOnClickListener {
-            Toast.makeText(requireContext(), "This is History", Toast.LENGTH_SHORT).show()
+            val intent = Intent(requireContext(), HistoryActivity::class.java)
+            startActivity(intent)
         }
     }
 
