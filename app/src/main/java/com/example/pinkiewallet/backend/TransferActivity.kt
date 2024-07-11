@@ -35,6 +35,7 @@ class TransferActivity : AppCompatActivity() {
         usersRef = database.getReference("users")
         transferViewModel = ViewModelProvider(this).get(TransferViewModel::class.java)
 
+        supportActionBar?.hide()
         setupUI()
         initFirebase()
 

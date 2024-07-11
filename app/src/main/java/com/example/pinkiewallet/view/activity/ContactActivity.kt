@@ -34,6 +34,7 @@ class ContactActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_contact)
+        supportActionBar?.hide()
 
         listView = findViewById(R.id.contact_list)
         searchView = findViewById(R.id.search_view)

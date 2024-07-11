@@ -32,6 +32,8 @@ class PinReqActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.pin_req)
 
+        supportActionBar?.hide()
+
         val caller = intent.getStringExtra("caller")
         val jumlahHarga = intent.getStringExtra("jumlah_harga")?.toInt() ?: 0
         val nomorHp = intent.getStringExtra("nomorHp") // Terima sebagai String

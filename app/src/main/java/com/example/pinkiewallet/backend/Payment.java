@@ -42,6 +42,11 @@ public class Payment extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.payment);
 
+        // Hide the support action bar
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
         // Terima nilai jumlah_harga dari intent
         Intent intent = getIntent();
         int jumlahHarga = intent.getIntExtra("jumlah_harga", 0);
