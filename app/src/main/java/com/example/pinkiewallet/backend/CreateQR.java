@@ -123,7 +123,7 @@ public class CreateQR extends AppCompatActivity {
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("image/png");
                 shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
-                shareIntent.putExtra(Intent.EXTRA_TEXT, "A-Abangg aku minta dana donggg.... ini kode QR akuu. Scan di Aplikasi Pinkie Yaaa :)");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "H-Halo aku minta dana donggg.... ini kode QR akuu. Scan di Aplikasi Pinkie Yaaa :)");
                 shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
                 startActivity(Intent.createChooser(shareIntent, "Bagikan QR Code via"));

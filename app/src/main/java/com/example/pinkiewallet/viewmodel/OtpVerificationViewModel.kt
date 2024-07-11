@@ -95,7 +95,7 @@ class OtpVerificationViewModel : ViewModel() {
         if (userId.isNotEmpty()) {
             usersRef.child(userId).apply {
                 // Example of setting additional fields
-                child("phone_number").setValue(phoneNumber)
+                child("phone_number").setValue("0" + phoneNumber)
                 child("balance").setValue(0)
                 child("point").setValue(0)
                 child("status").setValue("login")

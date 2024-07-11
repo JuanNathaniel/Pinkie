@@ -127,7 +127,6 @@ class LoginRegister : Fragment() {
             transaction.addToBackStack(null)
             transaction.commit()
         }
-
     }
 
     private fun validatePhoneNumber(phoneNumber: String) {
