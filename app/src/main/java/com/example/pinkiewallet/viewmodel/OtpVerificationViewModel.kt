@@ -50,15 +50,10 @@ class OtpVerificationViewModel : ViewModel() {
                         val status = userSnapshot.child("status").getValue(String::class.java)
                         if (status == "login") {
                             onError("User already logged in on another device")
+                            return
                         } else {
-                            val userId = auth.currentUser?.uid ?: ""
-                            if (userId.isNotEmpty()) {
-                                usersRef.child(userId).child("status").setValue("login")
-                                _isNewUser.value = false // Existing user
-                                onSuccess()
-                            } else {
-                                onError("Failed to get user ID")
-                            }
+                            handleUserLoggedIn(userSnapshot.key ?: "", onSuccess, onError)
+                            return
                         }
                     }
                 } else {
@@ -73,6 +68,22 @@ class OtpVerificationViewModel : ViewModel() {
                 onError("Failed to check user existence")
             }
         })
+    }
+
+    private fun handleUserLoggedIn(
+        userId: String,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        usersRef.child(userId).child("status").setValue("login")
+            .addOnSuccessListener {
+                _isNewUser.value = false // Existing user
+                onSuccess()
+            }
+            .addOnFailureListener { e ->
+                Log.e("OtpVerificationViewModel", "Error updating user status", e)
+                onError("Failed to update user status")
+            }
     }
 
     private fun savePhoneNumberToDatabase(

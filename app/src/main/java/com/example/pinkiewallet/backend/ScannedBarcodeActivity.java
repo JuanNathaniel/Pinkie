@@ -6,17 +6,25 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pinkiewallet.R;
+import com.example.pinkiewallet.view.fragment.Transfer;
+import com.example.pinkiewallet.backend.TransferActivity;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import java.io.IOException;
 
 public class ScannedBarcodeActivity extends AppCompatActivity {
@@ -129,6 +137,20 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
         intent.putExtra("nomor_telepon", phoneNumber);
         startActivity(intent);
         finish();
+
+        // Menyembunyikan Bottom Navigation View
+//        BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
+//        if (bottomNavigationView != null) {
+//            bottomNavigationView.setVisibility(View.GONE);
+//        }
+//
+//        Transfer Transfer_ = new Transfer();
+//        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        fragmentTransaction.replace(R.id.fragment_container, Transfer_);
+//        fragmentTransaction.addToBackStack(null);
+//        fragmentTransaction.commit();
+
     }
 
     @Override

@@ -1,12 +1,17 @@
 package com.example.pinkiewallet.backend;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import com.example.pinkiewallet.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,11 +25,17 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 public class CreateQR extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference databaseReference;
     private ImageView imageView;
     private TextView phoneNumberTextView;
+    private Button shareButton;
+    private Bitmap qrBitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +44,13 @@ public class CreateQR extends AppCompatActivity {
 
         imageView = findViewById(R.id.qrCodeImageView);
         phoneNumberTextView = findViewById(R.id.phoneNumberTextView);
+        shareButton = findViewById(R.id.shareButton);
         mAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
         getPhoneNumberAndGenerateQRCode();
+
+        shareButton.setOnClickListener(v -> shareQRCode());
     }
 
     private void getPhoneNumberAndGenerateQRCode() {
@@ -72,10 +86,38 @@ public class CreateQR extends AppCompatActivity {
         try {
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
             BitMatrix bitMatrix = barcodeEncoder.encode(text, BarcodeFormat.QR_CODE, 400, 400);
-            Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
-            imageView.setImageBitmap(bitmap);
+            qrBitmap = barcodeEncoder.createBitmap(bitMatrix);
+            imageView.setImageBitmap(qrBitmap);
         } catch (WriterException e) {
             e.printStackTrace();
         }
     }
+
+    private void shareQRCode() {
+        if (qrBitmap != null) {
+            try {
+                // Simpan gambar ke penyimpanan sementara
+                File cachePath = new File(getExternalCacheDir(), "my_images/");
+                cachePath.mkdirs(); // Pastikan direktori ada
+                File file = new File(cachePath, "qr_code.png");
+                FileOutputStream stream = new FileOutputStream(file); // Timpa file
+                qrBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                stream.close();
+
+                Uri contentUri = FileProvider.getUriForFile(this, "com.example.pinkiewallet.fileprovider", file);
+
+                // Buat Intent untuk berbagi gambar
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("image/png");
+                shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "A-Abangg aku minta dana donggg.... ini kode QR akuu. Scan di Aplikasi Pinkie Yaaa :)");
+                shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                startActivity(Intent.createChooser(shareIntent, "Bagikan QR Code via"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }
