@@ -79,6 +79,7 @@ class PinReqActivity : AppCompatActivity() {
                     transferViewModel.checkRecipientPhoneAndTransfer(nomorHp ?: "", jumlahHarga, applicationContext)
                 } else if (caller == "QrMain") {
                     pinViewModel.updateBalance(jumlahHarga,applicationContext)
+
                 }
             } else {
                 Toast.makeText(this, "PIN salah", Toast.LENGTH_SHORT).show()
@@ -88,7 +89,7 @@ class PinReqActivity : AppCompatActivity() {
 
         transferViewModel.transferResult.observe(this, Observer { transferSuccessful ->
             if (transferSuccessful) {
-                navigateToPayment(jumlahHarga, "Transfer")
+                navigateToPayment(jumlahHarga, "Transfer To " + nomorHp)
             } else {
                 Toast.makeText(this, "Transfer gagal", Toast.LENGTH_SHORT).show()
                 showKeyboard(pinInput)
