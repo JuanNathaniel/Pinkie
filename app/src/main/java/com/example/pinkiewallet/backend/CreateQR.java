@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import com.example.pinkiewallet.R;
+import com.example.pinkiewallet.databinding.CreateQrBinding;
+import com.example.pinkiewallet.view.activity.MainActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -36,12 +38,18 @@ public class CreateQR extends AppCompatActivity {
     private TextView phoneNumberTextView;
     private Button shareButton;
     private Bitmap qrBitmap;
+    private CreateQrBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.create_qr);
+        binding = CreateQrBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
+        // Hide the support action bar
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
         imageView = findViewById(R.id.qrCodeImageView);
         phoneNumberTextView = findViewById(R.id.phoneNumberTextView);
         shareButton = findViewById(R.id.shareButton);
@@ -51,6 +59,11 @@ public class CreateQR extends AppCompatActivity {
         getPhoneNumberAndGenerateQRCode();
 
         shareButton.setOnClickListener(v -> shareQRCode());
+        binding.backwardButton.setOnClickListener(v -> {
+            Intent intent = new Intent(CreateQR.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        });
     }
 
     private void getPhoneNumberAndGenerateQRCode() {

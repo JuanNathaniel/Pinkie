@@ -3,13 +3,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/pink"
     tools:context=".backend.CreateQR">
+
+    <ImageButton
+        android:id="@+id/backward_button"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/ic_arrow_backward"
+        android:scaleType="fitCenter"
+        android:background="@color/pink"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="25dp"/>
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text= "Top Up Your Saldo"
+        android:textSize="22sp"
+        android:layout_toRightOf="@id/backward_button"
+        android:textColor="@color/white"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"/>
 
     <ImageView
         android:id="@+id/qrCodeImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"/>
+        android:layout_width="280dp"
+        android:layout_height="280dp"
+        android:layout_below="@+id/tvTitle"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="150dp" />
 
     <TextView
         android:id="@+id/phoneNumberTextView"
@@ -17,8 +41,10 @@
         android:layout_height="wrap_content"
         android:text="Nomor Telepon: "
         android:textSize="18sp"
+        android:layout_below="@id/qrCodeImageView"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="250dp"/>
 
     <Button
