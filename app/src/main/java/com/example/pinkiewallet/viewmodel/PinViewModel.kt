@@ -9,6 +9,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ServerValue
 import com.google.firebase.database.ValueEventListener
 
 class PinViewModel : ViewModel() {
@@ -53,10 +54,12 @@ class PinViewModel : ViewModel() {
                         if (currentBalance >= jumlahHarga) {
                             val newBalance = currentBalance - jumlahHarga
                             userRef.child("balance").setValue(newBalance).addOnCompleteListener { task ->
-                                _balanceUpdateResult.value = task.isSuccessful
                                 if (task.isSuccessful) {
+                                    _balanceUpdateResult.value = true
                                     Toast.makeText(applicationContext, "Saldo berhasil diperbarui", Toast.LENGTH_SHORT).show()
+                                    addTransactionHistory(userId, jumlahHarga, applicationContext)
                                 } else {
+                                    _balanceUpdateResult.value = false
                                     Toast.makeText(applicationContext, "Gagal memperbarui saldo", Toast.LENGTH_SHORT).show()
                                 }
                             }
@@ -81,4 +84,20 @@ class PinViewModel : ViewModel() {
         }
     }
 
+    private fun addTransactionHistory(userId: String, amount: Int, applicationContext: Context) {
+        val transactionRef = database.getReference("transactions").push()
+        val transaction = hashMapOf(
+            "from" to userId,
+            "to" to "Bayar",
+            "amount" to amount,
+            "timestamp" to ServerValue.TIMESTAMP
+        )
+        transactionRef.setValue(transaction).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Toast.makeText(applicationContext, "Riwayat transaksi berhasil ditambahkan", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(applicationContext, "Gagal menambahkan riwayat transaksi", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 }
