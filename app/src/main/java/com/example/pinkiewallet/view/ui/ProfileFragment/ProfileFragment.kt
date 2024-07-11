@@ -15,11 +15,7 @@ import com.example.pinkiewallet.model.ListItem
 import com.example.pinkiewallet.view.adapter.VerticalAdapter
 import com.example.pinkiewallet.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 
 class ProfileFragment : Fragment() {
 
@@ -29,7 +25,7 @@ class ProfileFragment : Fragment() {
     private lateinit var mAuth: FirebaseAuth
     private lateinit var database: FirebaseDatabase
     private lateinit var usersRef: DatabaseReference
-    private lateinit var NameListener: ValueEventListener
+    private lateinit var nameListener: ValueEventListener
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,8 +64,8 @@ class ProfileFragment : Fragment() {
     private fun initFirebase() {
         val userId = mAuth.currentUser?.uid
         if (userId != null) {
-            NameListener = createNameListener()
-            usersRef.child(userId).addValueEventListener(NameListener)
+            nameListener = createNameListener()
+            usersRef.child(userId).addValueEventListener(nameListener)
         } else {
             Toast.makeText(requireContext(), "User not authenticated", Toast.LENGTH_SHORT).show()
         }
@@ -78,13 +74,15 @@ class ProfileFragment : Fragment() {
     private fun createNameListener(): ValueEventListener {
         return object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    val nama = dataSnapshot.child("nama_lengkap").getValue(String::class.java)
-                    val noHp = dataSnapshot.child("phone_number").getValue(String::class.java)
-                    binding.textName.text = nama ?: "Nama Tidak Ditemukan"
-                    binding.textPhoneNumber.text = noHp ?: "Nomor HP Tidak Ditemukan"
-                } else {
-                    Toast.makeText(requireContext(), "User not found", Toast.LENGTH_SHORT).show()
+                _binding?.let {
+                    if (dataSnapshot.exists()) {
+                        val nama = dataSnapshot.child("nama_lengkap").getValue(String::class.java)
+                        val noHp = dataSnapshot.child("phone_number").getValue(String::class.java)
+                        it.textName.text = nama ?: "Nama Tidak Ditemukan"
+                        it.textPhoneNumber.text = noHp ?: "Nomor HP Tidak Ditemukan"
+                    } else {
+                        Toast.makeText(requireContext(), "User not found", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
 

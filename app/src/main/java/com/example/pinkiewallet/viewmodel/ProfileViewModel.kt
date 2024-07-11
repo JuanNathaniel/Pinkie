@@ -17,8 +17,8 @@ class ProfileViewModel : ViewModel() {
             val usersRef = database.getReference("users")
             usersRef.child(userId).child("status").setValue("logout")
                 .addOnSuccessListener {
-                    FirebaseAuth.getInstance().signOut()
                     navigateToStartActivity(context)
+                    FirebaseAuth.getInstance().signOut()
                     Toast.makeText(context, "Logout successful", Toast.LENGTH_SHORT).show()
                 }
                 .addOnFailureListener { e ->

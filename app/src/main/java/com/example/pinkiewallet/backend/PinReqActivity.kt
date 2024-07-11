@@ -14,8 +14,10 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.pinkiewallet.R
+import com.example.pinkiewallet.view.fragment.Transfer
 import com.example.pinkiewallet.viewmodel.PinViewModel
 import com.example.pinkiewallet.viewmodel.TransferViewModel
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.security.MessageDigest
 
@@ -80,22 +82,26 @@ class PinReqActivity : AppCompatActivity() {
                 }
             } else {
                 Toast.makeText(this, "PIN salah", Toast.LENGTH_SHORT).show()
+                showKeyboard(pinInput)
             }
         })
 
         transferViewModel.transferResult.observe(this, Observer { transferSuccessful ->
             if (transferSuccessful) {
-                navigateToPayment(jumlahHarga,"Transfer")
+                navigateToPayment(jumlahHarga, "Transfer")
             } else {
                 Toast.makeText(this, "Transfer gagal", Toast.LENGTH_SHORT).show()
+                showKeyboard(pinInput)
+                navigateToTransfer() // Mengarahkan kembali ke Transfer class (fragment)
             }
         })
 
         pinViewModel.balanceUpdateResult.observe(this, Observer { balanceUpdateSuccessful ->
             if (balanceUpdateSuccessful) {
-                navigateToPayment(jumlahHarga,"Bayar")
+                navigateToPayment(jumlahHarga, "Bayar")
             } else {
                 Toast.makeText(this, "Update saldo gagal", Toast.LENGTH_SHORT).show()
+                showKeyboard(pinInput)
             }
         })
     }
@@ -107,6 +113,18 @@ class PinReqActivity : AppCompatActivity() {
         intent.putExtra("origin", origin) // Menambahkan asal transaksi ke intent
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
+    }
+
+    private fun navigateToTransfer() {
+        val transferFragment = Transfer()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, transferFragment)
+            .addToBackStack(null)
+            .commit()
+
+        // Pastikan BottomNavigationView disembunyikan
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.nav_view)
+        bottomNavigationView.visibility = View.GONE
     }
 
     private fun updatePinCircles(pin: CharSequence?) {
@@ -133,8 +151,6 @@ class PinReqActivity : AppCompatActivity() {
         val hashBytes = digest.digest(pin.toByteArray(Charsets.UTF_8))
         return hashBytes.joinToString("") { "%02x".format(it) }
     }
-
-
 
     private fun showKeyboard(view: View) {
         val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager

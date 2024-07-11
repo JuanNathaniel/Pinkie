@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -51,10 +52,22 @@
         <activity android:name=".backend.QrMain" />
         <activity android:name=".backend.ScannedBarcodeActivity" />
         <activity android:name=".view.activity.ContactActivity" />
+        <activity android:name=".view.activity.HistoryActivity" />
         <!-- <activity android:name=".DaftarActivity" /> -->
         <!-- <activity android:name=".TransferActivity" /> -->
         <!-- <activity android:name=".CreateQR" /> -->
 
-    </application>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.pinkiewallet.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"/>
+        </provider>
+
+</application>
 
 </manifest>
