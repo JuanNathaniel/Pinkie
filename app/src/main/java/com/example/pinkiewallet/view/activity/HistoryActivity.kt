@@ -3,6 +3,8 @@ package com.example.pinkiewallet.view.activity
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pinkiewallet.R
@@ -21,12 +23,23 @@ class HistoryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_history)
 
+        // Hide the support action bar
+        supportActionBar?.hide()
+
         rvTransaction = findViewById(R.id.rv_Transaction)
 
         mAuth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().reference
 
         rvTransaction.layoutManager = LinearLayoutManager(this)
+
+        // Tambahkan DividerItemDecoration di sini
+        val itemDecoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+        val dividerDrawable = ContextCompat.getDrawable(this, R.drawable.divider_line)
+        if (dividerDrawable != null) {
+            itemDecoration.setDrawable(dividerDrawable)
+        }
+        rvTransaction.addItemDecoration(itemDecoration)
 
         fetchUserDetails()
     }

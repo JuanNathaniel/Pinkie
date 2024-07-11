@@ -9,7 +9,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Amount"
-        android:textSize="16sp"
+        android:textSize="22sp"
+        android:textColor="@color/bone"
         android:textStyle="bold" />
 
     <TextView
@@ -17,19 +18,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="From"
-        android:textSize="14sp" />
+        android:textColor="@color/bone"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/tvTransactionTo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="To"
-        android:textSize="14sp" />
+        android:textColor="@color/bone"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/tvTransactionTimestamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Timestamp"
-        android:textSize="12sp" />
+        android:textColor="@color/bone"
+        android:textSize="18sp" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
 </LinearLayout>

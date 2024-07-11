@@ -1,5 +1,6 @@
 package com.example.pinkiewallet.view.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,15 +29,25 @@ class TransactionAdapter(private val transactions: List<Transaction>) :
 
     override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
         val transaction = transactions[position]
-        holder.tvAmount.text = transaction.amount?.toString() ?: "N/A"
-        holder.tvFrom.text = transaction.from ?: "N/A"
-        holder.tvTo.text = transaction.to ?: "N/A"
 
-        // Format the timestamp to a readable date
+        // Format data dengan padding agar rata
+        val amountText = String.format("%-8s %s", "Amount:", transaction.amount?.toString() ?: "N/A")
+        val fromText = String.format("%-8s %s", "From:", transaction.from ?: "N/A")
+        val toText = String.format("%-11s %s", "To:", transaction.to ?: "N/A")
+
+        // Format timestamp menjadi tanggal yang dapat dibaca
         val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         val date = transaction.timestamp?.let { Date(it) }
-        holder.tvTimestamp.text = date?.let { dateFormat.format(it) } ?: "N/A"
+        val timestampText = String.format("%-11s %s", "Date:", date?.let { dateFormat.format(it) } ?: "N/A")
+
+        holder.tvAmount.text = amountText
+        holder.tvFrom.text = fromText
+        holder.tvTo.text = toText
+        holder.tvTimestamp.text = timestampText
+
     }
+
+
 
     override fun getItemCount(): Int = transactions.size
 }

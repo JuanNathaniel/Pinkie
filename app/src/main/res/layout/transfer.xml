@@ -9,7 +9,6 @@
     android:padding="16dp"
     android:background="@color/pink"
     tools:context=".backend.TransferActivity">
-    >
 
     <ImageButton
         android:id="@+id/backward_button"
