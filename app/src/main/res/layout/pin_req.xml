@@ -104,4 +104,13 @@
         android:src="@drawable/ic_next_regist"
         android:contentDescription="ButtonLanjutPage" />
 
+
+    <!-- Container for Fragments -->
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/subtitle"
+        android:layout_marginTop="27dp"
+        android:visibility="gone" />
 </RelativeLayout>

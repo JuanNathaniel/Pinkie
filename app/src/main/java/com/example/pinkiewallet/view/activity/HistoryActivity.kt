@@ -28,10 +28,30 @@ class HistoryActivity : AppCompatActivity() {
 
         rvTransaction.layoutManager = LinearLayoutManager(this)
 
-        fetchTransactions()
+        fetchUserDetails()
     }
 
-    private fun fetchTransactions() {
+    private fun fetchUserDetails() {
+        database.child("users").addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val userMap = mutableMapOf<String, String>()
+                for (snapshot in dataSnapshot.children) {
+                    val userId = snapshot.key
+                    val phoneNumber = snapshot.child("phone_number").getValue(String::class.java)
+                    if (userId != null && phoneNumber != null) {
+                        userMap[userId] = phoneNumber
+                    }
+                }
+                fetchTransactions(userMap)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e("HistoryActivity", "Failed to load user details", databaseError.toException())
+            }
+        })
+    }
+
+    private fun fetchTransactions(userMap: Map<String, String>) {
         val userId = mAuth.currentUser?.uid
         if (userId == null) {
             Log.e("HistoryActivity", "User ID is null")
@@ -45,6 +65,9 @@ class HistoryActivity : AppCompatActivity() {
                 for (snapshot in dataSnapshot.children) {
                     val transaction = snapshot.getValue(Transaction::class.java)
                     if (transaction != null && (transaction.from == userId || transaction.to == userId)) {
+                        // Map user IDs to phone numbers
+                        transaction.from = userMap[transaction.from] ?: transaction.from
+                        transaction.to = userMap[transaction.to] ?: transaction.to
                         transactions.add(transaction)
                     }
                 }

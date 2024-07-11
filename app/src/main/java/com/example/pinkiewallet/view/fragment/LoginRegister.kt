@@ -18,6 +18,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import java.util.concurrent.TimeUnit
 
 class LoginRegister : Fragment() {
@@ -25,6 +30,8 @@ class LoginRegister : Fragment() {
     private var _binding: LoginRegisterBinding? = null
     private val binding get() = _binding!!
     private lateinit var phoneNumber: String
+    private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
+    private val usersRef: DatabaseReference = database.getReference("users")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,10 +53,12 @@ class LoginRegister : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
 
-        binding.lanjutkanButton.setOnClickListener{
+        binding.lanjutkanButton.setOnClickListener {
             if (!binding.textFieldPhone.isEmpty()) {
                 phoneNumber = binding.textFieldPhone.editText?.text.toString()
-                sendOtpToPhoneNumber(phoneNumber)
+
+                // Check if the user is already logged in
+                checkUserLoggedIn(phoneNumber)
             } else {
                 Toast.makeText(requireContext(), "Ada Data Yang Masih Kosong", Toast.LENGTH_SHORT).show()
             }
@@ -60,6 +69,34 @@ class LoginRegister : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun checkUserLoggedIn(phoneNumber: String) {
+
+        val query = usersRef.orderByChild("phone_number").equalTo(phoneNumber)
+        query.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    for (userSnapshot in snapshot.children) {
+                        val status = userSnapshot.child("status").getValue(String::class.java)
+                        if (status == "login") {
+                            Toast.makeText(requireContext(), "User sudah login di perangkat lain", Toast.LENGTH_SHORT).show()
+                            // Handle accordingly, maybe show a message or take action
+                        } else {
+                            // If not logged in, proceed to send OTP
+                            sendOtpToPhoneNumber(phoneNumber)
+                        }
+                    }
+                } else {
+                    // User not found, proceed to send OTP
+                    sendOtpToPhoneNumber(phoneNumber)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(requireContext(), "Error: ${error.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun sendOtpToPhoneNumber(phoneNumber: String) {

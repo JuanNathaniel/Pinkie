@@ -13,13 +13,15 @@ import com.example.pinkiewallet.R
 import com.example.pinkiewallet.view.adapter.HorizontalAdapter
 import com.example.pinkiewallet.model.Item
 import com.example.pinkiewallet.backend.CreateQR
-import com.example.pinkiewallet.backend.TransferActivity
 import com.example.pinkiewallet.databinding.FragmentHomeBinding
+import com.example.pinkiewallet.view.activity.ContactActivity
+import com.example.pinkiewallet.view.activity.HistoryActivity
 import com.example.pinkiewallet.view.fragment.Register2
 import com.example.pinkiewallet.view.fragment.Transfer
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+
 
 class HomeFragment : Fragment() {
 
@@ -50,25 +52,16 @@ class HomeFragment : Fragment() {
     }
 
     private fun initUI() {
-        // Initialize RecyclerView for Favorite Transaction
         val horizontalRecyclerViewFav = binding.horizontalRecyclerViewFavoriteTransaction
         val itemListFav: MutableList<Item> = ArrayList()
-
-        // Example items for Favorite Transaction RecyclerView
-//        itemListFav.add(Item("https://www.example.com/image1.jpg"))
-//        itemListFav.add(Item("https://www.example.com/image2.jpg"))
-        // Add more items as needed
 
         val favTransactionAdapter = HorizontalAdapter(itemListFav)
         horizontalRecyclerViewFav.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         horizontalRecyclerViewFav.adapter = favTransactionAdapter
 
-        // Initialize RecyclerView for Insight
         val horizontalRecyclerView = binding.horizontalRecyclerView
         val itemList: MutableList<Item> = ArrayList()
-
-        // Example items for Insight RecyclerView
 
         itemList.add(Item("https://www.ukulele.co.nz/wp-content/uploads/2020/11/Iklan-mcdonalds.jpg"))
         itemList.add(Item("https://kledo.com/blog/wp-content/uploads/2022/01/iklan-produk.jpg"))
@@ -76,8 +69,6 @@ class HomeFragment : Fragment() {
         itemList.add(Item("https://lh5.googleusercontent.com/YOVjx5EeT8vtVEge-HV6TSWRe2wyxPsaWvtiWl6u9jrAIoEnEwfLHZX9NVNZlUYdpG3sqTwWgdljrkGyw5jTv3qAXhgVSdws2I6SChKFVWP2i7ABXiz4s60lTYXsFHWKOQUhrrdjTqP4g0RY-T_gDiU"))
 
         if (itemList.isEmpty()) {
-            // Daftar item kosong, lakukan sesuatu di sini jika diperlukan
-            // Toast.makeText(this, "Daftar item kosong", Toast.LENGTH_SHORT).show()
             binding.emptyListInsight.visibility = View.VISIBLE
         } else {
             val adapter = HorizontalAdapter(itemList)
@@ -85,12 +76,12 @@ class HomeFragment : Fragment() {
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             horizontalRecyclerView.adapter = adapter
         }
+
         val insightAdapter = HorizontalAdapter(itemList)
         horizontalRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         horizontalRecyclerView.adapter = insightAdapter
 
-        // Handle eye button to show/hide saldo
         binding.eyebuttonopen.setOnClickListener {
             binding.eyebuttonopen.visibility = View.INVISIBLE
             binding.eyebuttonclose.visibility = View.VISIBLE
@@ -109,42 +100,36 @@ class HomeFragment : Fragment() {
             binding.closepoints.visibility = View.INVISIBLE
         }
 
-        // Handle top up button click
         binding.topupbt.setOnClickListener {
             val intent = Intent(requireContext(), CreateQR::class.java)
             startActivity(intent)
         }
 
-        // Handle transfer button click
         binding.transferbt.setOnClickListener {
-//            val intent = Intent(requireContext(), TransferActivity::class.java)
-//            startActivity(intent)
-
             val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.nav_view)
             bottomNavigationView.visibility = View.GONE
 
             val transferFragment = Transfer()
             requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, transferFragment)  //
+                .replace(R.id.fragment_container, transferFragment)
                 .addToBackStack(null)
                 .commit()
         }
 
-        // Handle withdraw button click
         binding.withdrawbt.setOnClickListener {
-            Toast.makeText(requireContext(), "Upcoming Feature", Toast.LENGTH_SHORT).show()
+            val intent = Intent(requireContext(), ContactActivity::class.java)
+            startActivity(intent)
         }
 
-        // Handle history button click
         binding.historybt.setOnClickListener {
-            Toast.makeText(requireContext(), "This is History", Toast.LENGTH_SHORT).show()
+            val intent = Intent(requireContext(), HistoryActivity::class.java)
+            startActivity(intent)
         }
     }
 
     private fun initFirebase() {
         val userId = mAuth.currentUser?.uid
         if (userId != null) {
-            // Create and add ValueEventListener for balance
             balanceListener = createBalanceListener()
             usersRef.child(userId).addValueEventListener(balanceListener)
         } else {
@@ -158,8 +143,10 @@ class HomeFragment : Fragment() {
                 if (dataSnapshot.exists()) {
                     val balance = dataSnapshot.child("balance").getValue(Long::class.java)
                     val points = dataSnapshot.child("point").getValue(Long::class.java)
-                    binding.cash.text = balance?.toString() ?: "0"
-                    binding.openpoints.text = points?.toString() ?: "0"
+                    _binding?.let { binding ->
+                        binding.cash.text = balance?.toString() ?: "0"
+                        binding.openpoints.text = points?.toString() ?: "0"
+                    }
                 } else {
                     Toast.makeText(requireContext(), "User not found", Toast.LENGTH_SHORT).show()
                 }
