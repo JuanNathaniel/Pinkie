@@ -1,5 +1,6 @@
 package com.example.pinkiewallet.backend
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -7,9 +8,12 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.pinkiewallet.R
-import com.example.pinkiewallet.databinding.ActivityTransferBinding
 import com.example.pinkiewallet.databinding.TransferBinding
+import com.example.pinkiewallet.backend.Payment
+import com.example.pinkiewallet.viewmodel.TransferViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
@@ -19,6 +23,7 @@ class TransferActivity : AppCompatActivity() {
     private lateinit var mAuth: FirebaseAuth
     private lateinit var database: FirebaseDatabase
     private lateinit var usersRef: DatabaseReference
+    private lateinit var transferViewModel: TransferViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,18 +33,18 @@ class TransferActivity : AppCompatActivity() {
         mAuth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
         usersRef = database.getReference("users")
+        transferViewModel = ViewModelProvider(this).get(TransferViewModel::class.java)
 
         setupUI()
         initFirebase()
-
-        binding.backwardButton.setOnClickListener {
-            finish()
-        }
 
         // Ambil nomor telepon dari intent dan set ke etRecipientPhone
         val phoneNumber = intent.getStringExtra("nomor_telepon")
         if (phoneNumber != null) {
             binding.nomorPenerima.setText(phoneNumber)
+            Log.d("TransferActivity", "Received phone number: $phoneNumber") // Log for debugging
+        } else {
+            Log.e("TransferActivity", "No phone number received from Intent") // Log for debugging
         }
 
         binding.btnContinue.setOnClickListener {
@@ -50,68 +55,38 @@ class TransferActivity : AppCompatActivity() {
                 Toast.makeText(this, "Semua kolom harus diisi", Toast.LENGTH_SHORT).show()
             } else {
                 val amount = amountStr.toInt()
-                transferMoney(recipientPhone, amount)
+                initiatePinRequest(recipientPhone, amountStr)
             }
+        }
+
+        transferViewModel.transferResult.observe(this, Observer { transferSuccessful ->
+            if (transferSuccessful) {
+                Toast.makeText(this, "Transfer berhasil - Ke Payment", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, Payment::class.java)
+                intent.putExtra("jumlah_harga", binding.etTransferAmount.text.toString())
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "Transfer gagal", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+        binding.backwardButton.setOnClickListener {
+            finish()
         }
     }
 
-    private fun transferMoney(recipientPhone: String, amount: Int) {
-        val senderId = mAuth.currentUser?.uid
-
-        usersRef.child(senderId!!).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    val senderBalanceObj = dataSnapshot.child("balance").getValue(Int::class.java)
-                    val senderBalance = senderBalanceObj ?: 0
-
-                    if (senderBalance >= amount) {
-                        val recipientRef = usersRef
-                        recipientRef.orderByChild("phone_number").equalTo(recipientPhone).addListenerForSingleValueEvent(object : ValueEventListener {
-                            override fun onDataChange(recipientSnapshot: DataSnapshot) {
-                                if (recipientSnapshot.exists()) {
-                                    val recipientId = recipientSnapshot.children.iterator().next().key
-                                    val recipientBalanceObj = recipientSnapshot.child(recipientId!!).child("balance").getValue(Int::class.java)
-                                    val recipientBalance = recipientBalanceObj ?: 0
-
-                                    // Update sender and recipient balances
-                                    usersRef.child(senderId).child("balance").setValue(senderBalance - amount)
-                                    usersRef.child(recipientId).child("balance").setValue(recipientBalance + amount)
-
-                                    // Save transaction record
-                                    val transactionRef = usersRef.child("transactions").push()
-                                    transactionRef.child("from").setValue(senderId)
-                                    transactionRef.child("to").setValue(recipientId)
-                                    transactionRef.child("amount").setValue(amount)
-                                    transactionRef.child("timestamp").setValue(ServerValue.TIMESTAMP)
-
-                                    Toast.makeText(this@TransferActivity, "Transfer berhasil", Toast.LENGTH_SHORT).show()
-                                } else {
-                                    Toast.makeText(this@TransferActivity, "Nomor penerima tidak ditemukan", Toast.LENGTH_SHORT).show()
-                                }
-                            }
-
-                            override fun onCancelled(databaseError: DatabaseError) {
-                                Log.e("FirebaseDB", "Gagal mencari nomor penerima", databaseError.toException())
-                            }
-                        })
-                    } else {
-                        Toast.makeText(this@TransferActivity, "Saldo tidak cukup", Toast.LENGTH_SHORT).show()
-                    }
-                } else {
-                    Toast.makeText(this@TransferActivity, "Pengirim tidak ditemukan", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.e("FirebaseDB", "Gagal mencari saldo pengirim", databaseError.toException())
-            }
-        })
+    private fun initiatePinRequest(nomorHP: String, jumlahHarga: String) {
+        val pinReqIntent = Intent(this, PinReqActivity::class.java)
+        pinReqIntent.putExtra("caller", "TransferActivity")
+        pinReqIntent.putExtra("jumlah_harga", jumlahHarga)
+        pinReqIntent.putExtra("nomorHp", nomorHP)
+        startActivity(pinReqIntent)
     }
 
     private fun initFirebase() {
         val userId = mAuth.currentUser?.uid
         if (userId != null) {
-            // Create and add ValueEventListener for balance
             val balanceListener = createBalanceListener()
             usersRef.child(userId).addValueEventListener(balanceListener)
         } else {
@@ -146,16 +121,9 @@ class TransferActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {
                 val amountString = s.toString()
                 if (amountString.isNotEmpty()) {
-                    // Parse the amount to Long to remove any leading zeros
                     val amount = amountString.toLong()
-
-                    // Format amount to Indonesian Rupiah format
                     val formattedAmount = formatToRupiah(amount)
-
-                    // Set formatted amount to TextView
                     binding.jumlahpembayaran.text = formattedAmount
-
-                    // Set button background color
                     binding.btnContinue.setBackgroundColor(ContextCompat.getColor(this@TransferActivity, R.color.teal_200))
                 } else {
                     binding.jumlahpembayaran.text = "Rp0"
@@ -163,7 +131,6 @@ class TransferActivity : AppCompatActivity() {
                 }
             }
         })
-        // Set initial button color to gray
         binding.btnContinue.setBackgroundColor(ContextCompat.getColor(this@TransferActivity, android.R.color.darker_gray))
     }
 

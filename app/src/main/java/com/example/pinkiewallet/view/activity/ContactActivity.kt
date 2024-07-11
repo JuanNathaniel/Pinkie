@@ -1,10 +1,12 @@
 package com.example.pinkiewallet.view.activity
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.os.Bundle
 import android.provider.ContactsContract
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.SearchView
@@ -13,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.pinkiewallet.R
-import com.example.pinkiewallet.model.User
+import com.example.pinkiewallet.backend.TransferActivity
 import com.google.firebase.database.*
 
 class ContactActivity : AppCompatActivity() {
@@ -60,6 +62,21 @@ class ContactActivity : AppCompatActivity() {
                 return false
             }
         })
+
+        // Setup ListView click listener
+        listView.setOnItemClickListener { parent, view, position, id ->
+            val selectedContact = contacts[position]
+            Log.d("ContactActivity", "Contact clicked: $selectedContact") // Log for debugging
+            if (selectedContact.contains("(Connected)")) {
+                val phoneNumber = selectedContact.split(":")[1].split(" ")[1]
+                Log.d("ContactActivity", "Navigating to TransferActivity with phone number: $phoneNumber") // Log for debugging
+                val intent = Intent(this, TransferActivity::class.java)
+                intent.putExtra("nomor_telepon", phoneNumber)
+                startActivity(intent)
+            }
+        }
+
+
     }
 
     override fun onRequestPermissionsResult(
@@ -113,11 +130,11 @@ class ContactActivity : AppCompatActivity() {
                             )
 
                             phoneCursor?.let { pc ->
-                                val phone_number = pc.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
-                                if (phone_number >= 0) {
+                                val phoneNumberIndex = pc.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
+                                if (phoneNumberIndex >= 0) {
                                     while (pc.moveToNext()) {
-                                        val phone_number = pc.getString(phone_number)
-                                        tempContacts.add(Pair(name, phone_number))
+                                        val phoneNumber = pc.getString(phoneNumberIndex)
+                                        tempContacts.add(Pair(name, phoneNumber))
                                     }
                                 }
                                 pc.close()
@@ -138,7 +155,7 @@ class ContactActivity : AppCompatActivity() {
         for (contact in tempContacts) {
             val name = contact.first
             val phoneNumber = contact.second
-            database.orderByChild("phone_Number").equalTo(phoneNumber)
+            database.orderByChild("phone_number").equalTo(phoneNumber)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         if (snapshot.exists()) {
@@ -167,6 +184,4 @@ class ContactActivity : AppCompatActivity() {
         adapter = ArrayAdapter(this, R.layout.list_contact, contacts)
         listView.adapter = adapter
     }
-
-
 }
