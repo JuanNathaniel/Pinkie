@@ -83,7 +83,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Withdraw"
+        android:text="Contacts"
         android:textSize="12sp"
         android:textColor="@color/white"
         android:layout_marginTop="135dp"
@@ -292,10 +292,10 @@
         android:layout_height="wrap_content"
         android:text="@string/none_favorite_transaction"
         android:textSize="18sp"
+        android:layout_centerHorizontal="true"
         android:textColor="@android:color/white"
         android:layout_marginTop= "495dp"
-        android:layout_marginLeft="100dp"
-        android:visibility="gone" />
+        android:layout_marginLeft="100dp" />
 
     <!-- TextView untuk jika empty insight -->
     <TextView

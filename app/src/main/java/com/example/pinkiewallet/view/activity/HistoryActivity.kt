@@ -1,5 +1,6 @@
 package com.example.pinkiewallet.view.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pinkiewallet.R
+import com.example.pinkiewallet.databinding.ActivityHistoryBinding
 import com.example.pinkiewallet.model.Transaction
 import com.example.pinkiewallet.view.adapter.TransactionAdapter
 import com.google.firebase.auth.FirebaseAuth
@@ -18,10 +20,12 @@ class HistoryActivity : AppCompatActivity() {
     private lateinit var rvTransaction: RecyclerView
     private lateinit var mAuth: FirebaseAuth
     private lateinit var database: DatabaseReference
+    private lateinit var binding: ActivityHistoryBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_history)
+        binding = ActivityHistoryBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         // Hide the support action bar
         supportActionBar?.hide()
@@ -40,7 +44,11 @@ class HistoryActivity : AppCompatActivity() {
             itemDecoration.setDrawable(dividerDrawable)
         }
         rvTransaction.addItemDecoration(itemDecoration)
-
+        binding.backwardButton.setOnClickListener {
+            val intent = Intent(this@HistoryActivity, MainActivity::class.java)
+            startActivity(intent)
+            finish() // Menutup activity Payment
+        }
         fetchUserDetails()
     }
 
