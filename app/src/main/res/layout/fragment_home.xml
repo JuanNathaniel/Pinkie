@@ -42,7 +42,7 @@
 
     <ImageButton
         android:id="@+id/withdrawbt"
-        android:src="@drawable/ic_withdraw"
+        android:src="@drawable/ic_contact"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginTop="95dp"

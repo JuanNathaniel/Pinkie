@@ -63,7 +63,7 @@ class HomeFragment : Fragment() {
         val horizontalRecyclerView = binding.horizontalRecyclerView
         val itemList: MutableList<Item> = ArrayList()
 
-        itemList.add(Item("https://www.ukulele.co.nz/wp-content/uploads/2020/11/Iklan-mcdonalds.jpg"))
+        itemList.add(Item("https://jabarekspres.com/wp-content/uploads/2023/02/Review-AdaKami-e1676089545943.jpg"))
         itemList.add(Item("https://kledo.com/blog/wp-content/uploads/2022/01/iklan-produk.jpg"))
         itemList.add(Item("https://cdn-image.hipwee.com/wp-content/uploads/2020/06/hipwee-floridina-01.jpg"))
         itemList.add(Item("https://lh5.googleusercontent.com/YOVjx5EeT8vtVEge-HV6TSWRe2wyxPsaWvtiWl6u9jrAIoEnEwfLHZX9NVNZlUYdpG3sqTwWgdljrkGyw5jTv3qAXhgVSdws2I6SChKFVWP2i7ABXiz4s60lTYXsFHWKOQUhrrdjTqP4g0RY-T_gDiU"))
