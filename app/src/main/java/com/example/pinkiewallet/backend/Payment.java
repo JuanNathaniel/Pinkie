@@ -1,10 +1,12 @@
 package com.example.pinkiewallet.backend;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,15 +21,22 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.example.pinkiewallet.view.activity.MainActivity;
 
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 public class Payment extends AppCompatActivity {
-    EditText HasilTotal;
-    EditText KataAsal;
+    TextView HasilTotal;
+    TextView KataAsal;
+    TextView timeTextView;
 
     private Button openButton;
 
     private FirebaseAuth mAuth;
     private DatabaseReference databaseReference;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,12 +48,22 @@ public class Payment extends AppCompatActivity {
         String origin = intent.getStringExtra("origin");
         String asal = origin;
 
+        // Format jumlah_harga ke dalam format Rupiah
+        NumberFormat rupiahFormat = NumberFormat.getCurrencyInstance(new Locale("in", "ID"));
+        String formattedHarga = rupiahFormat.format(jumlahHarga);
+
         // Set nilai jumlah_harga ke dalam EditText HasilTotal
         HasilTotal = findViewById(R.id.HasilTotal);
-        HasilTotal.setText(String.valueOf(jumlahHarga));
+        HasilTotal.setText(formattedHarga);
 
         KataAsal = findViewById(R.id.Asal);
         KataAsal.setText(asal);
+
+        // Set tanggal dan waktu saat ini
+        timeTextView = findViewById(R.id.time);
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String currentTime = dateFormat.format(Calendar.getInstance().getTime());
+        timeTextView.setText(currentTime);
 
         openButton = findViewById(R.id.backMain);
 
