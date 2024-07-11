@@ -83,4 +83,6 @@ dependencies {
     implementation("com.journeyapps:zxing-android-embedded:4.1.0")
     implementation ("org.bouncycastle:bcprov-jdk15on:1.68")
     implementation("com.github.florent37:shapeofview:1.4.7")
+    implementation("com.google.firebase:firebase-messaging:23.0.3")
+
 }
