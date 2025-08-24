@@ -28,6 +28,9 @@ Warna utama: Pink
 Nuansa desain: Ceria, nyaman, bersahabat
 
 Konsep branding: Menjadikan Pinkie sebagai teman setia dalam mengelola keuangan digital.
+
 1121036 - Gibran I
+
 1121039 - Juan N
+
 1121053 - Michael P
