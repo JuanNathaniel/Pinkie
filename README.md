@@ -6,6 +6,7 @@ Deskripsi Singkat:
 Pinkie adalah sebuah aplikasi e-wallet dengan identitas utama warna pink yang memberi kesan ceria, hangat, dan ramah. Aplikasi ini dirancang untuk membantu pengguna mengelola keuangan sehari-hari secara mudah, cepat, aman, dan menyenangkan.
 
 Fitur Utama:
+
 1.Dashboard Berwarna Pink → tampilan utama dengan identitas khas.
 
 2.Transfer Uang → memudahkan kirim uang ke rekening lain.
